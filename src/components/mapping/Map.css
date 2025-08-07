@@ -1,0 +1,47 @@
+/*min-width: 768px*/
+
+
+.map-autoscaler {
+    width: 1280px;
+    height: 720px;
+}
+
+@media (max-width: 1320px) {
+    .map-autoscaler{
+        width: calc(100vw - 40px);
+    }
+}
+
+@media (max-width: 400px) {
+    .map-autoscaler{
+        width: 360px;
+    }
+}
+
+
+
+@media (max-height: 856px) and (max-width: 768px) {
+    .map-autoscaler{
+        height: calc(100vh - 136px);
+    }
+}
+
+@media (max-height: 588px) and (max-width: 768px) {
+    .map-autoscaler{
+        height: 452px;
+    }
+}
+
+
+
+@media (max-height: 895px) and (min-width: 769px) {
+    .map-autoscaler{
+        height: calc(100vh - 176px);
+    }
+}
+
+@media (max-height: 588px) and (min-width: 769px) {
+    .map-autoscaler{
+        height: 412px;
+    }
+}

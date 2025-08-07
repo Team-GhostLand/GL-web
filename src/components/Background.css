@@ -1,0 +1,29 @@
+#background-viewer{
+    /**
+        * KOLOR GHOSTLANDA: #000a8f -> więty z koloru roli GRAcz (gdy robiłem tą rolę, starałem się, żeby miała GhostLandowy kolor)
+        * JAKO HSL: Hue = 236deg, Sat. = 100%, Lightness = 28%
+    */
+    filter:
+        blur(4px) /*Blur. Duh.*/
+        brightness(28%) /*Brightness i Lightness są sobie równe*/
+        sepia(100%) /*Przestawia wszystko na sakalę czarno-żółto-białą*/
+        hue-rotate(176deg) /*Żółty ma 60deg, więc 236deg-60deg=176deg*/
+        saturate(425%); /*Niby saturation miało być na 100%, ale to jest satuRATE, nie satuRATION, ie. o ile zwiększyć wartość na obrazie. I w moich testach, mnożenie saturacji averege Minecraftowego screenshota przez 5,5 (tj. zwiększanie o 450%) dawało wyniki najbiżej średniej saturacji 100%*/
+}
+
+@media (pointer: coarse){
+    #background-viewer{
+        animation: fadeIn 2s;
+        opacity: 100%;
+    }
+}
+
+@keyframes fadeIn{
+    from {
+        opacity: 0%;
+    }
+
+    to {
+        opacity: 100%;
+    }
+}
