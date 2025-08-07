@@ -10,6 +10,7 @@ import { RailwayMap } from "~/components/mapping/RailwayMap";
 import { ImageMap } from "~/components/mapping/Map";
 import { findNavTarget } from "~/lib/MapHistoryController";
 import type { MapType } from "~/lib/MapType";
+import { GetModule } from "~/lib/utils";
 
 export default function MapViewer(props: {type: MapType, line?: string}) {
     return (
@@ -21,7 +22,7 @@ export default function MapViewer(props: {type: MapType, line?: string}) {
                         <RailwayMap line={props.line}/>
                     </Match>
                     <Match when={props.type === "gra-dynmap"}>
-                        <EmbedMap title="Mapa Kolejowa" src="http://130.61.60.187:3876"/>
+                        <EmbedMap title="Mapa Kolejowa" src={GetModule("railwaymap")}/>
                     </Match>
                     <Match when={props.type === "city"}>
                         <ImageMap src="" author="" title="Mapa Miejska"/>

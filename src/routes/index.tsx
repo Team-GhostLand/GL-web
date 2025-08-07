@@ -36,7 +36,7 @@ export default function Index() {
                     icon_w={100}
                 />
                 {/* S:[5]+[5]=10 // B:[5]+[5]=10 */}
-                <A href="https://github.com" target="_blank" rel="noopener noreferrer">
+                <A href="https://github.com/Team-GhostLand/GhostLand7" target="_blank" rel="noopener noreferrer">
                     <img src="/github_badge.png" height="80" width="300" class="mb-5 md:mb-10"></img>
                 </A>
             </div>

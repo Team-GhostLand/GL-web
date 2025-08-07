@@ -6,6 +6,7 @@ import { NavItem, LilGhost } from "~/components/Navigation";
 import "./app.css";
 import Background from "~/components/Background";
 import { ClientOnly } from "~/components/ClientOnly";
+import { GetModule } from "./lib/utils";
 
 export default function App() {
     return (
@@ -18,10 +19,9 @@ export default function App() {
                     <nav class="backdrop-blur-lg fixed top-0 w-full overflow-x-scroll flex text-xl font-light text-gray-200 text-nowrap">
                         <ul class="flex items-center">
                             <LilGhost/>
-                            <NavItem to="/download">Pliki</NavItem>
+                            <NavItem to={GetModule("ci")}>Pliki</NavItem>
                             <NavItem to="/map">Mapa</NavItem>
                             <NavItem to="/photos">Screenshoty</NavItem>
-                            <NavItem to="/launcher" last>Launcher</NavItem>
                         </ul>
                         <ul class="ml-auto items-center flex">
                             <NavItem nohighlight splash class="mr-1.5 md:mr-6" to="/status"><button>🟢</button> Online: 0/100</NavItem>
@@ -43,7 +43,7 @@ export default function App() {
                             props.children}
                         </Suspense>
                         <footer class="w-full bottom-0 text-sm font-light text-gray-500 text-center">
-                            Made with 💙 by <A href="/authors" class="border-b border-gray-500">Team GhostLand</A> in <A href="https://www.solidjs.com/" class="border-b border-gray-500">SolidJS</A>.
+                            Made with 💙 by <A href="https://github.com/Team-GhostLand/GL-web/graphs/contributors" class="border-b border-gray-500" target="_blank" rel="noopener noreferrer">Team GhostLand</A> in <A href="https://www.solidjs.com/" class="border-b border-gray-500" target="_blank" rel="noopener noreferrer">SolidJS</A>.
                         </footer>
                     </div>
                 </MetaProvider> 

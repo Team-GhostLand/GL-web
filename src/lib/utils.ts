@@ -1,3 +1,14 @@
+export const MODULE_PATH = "http://130.162.246.47:25575/modules/" //We can't just use the `/` prefix because: a) It would make local development cumbersome (you'd need to have a the GhostLand webserver running, or have weird issues - like /map/gra-dynmap embedding the GhostLand website recursievly) or force us to go through the hassle of setting up different envs for prod and dev (which, btw, would propably also lead us to using something like the GetModule func below - so it's not like the code would get much simpler); b) It would force us to use <a/> (instead of <A/>) whenever we want to redirect to a module (which introduces unnecessary cognitive overhead) or force us to configure Solid to somehow exclude `/modules` from its redirects (and I don't know how to do that) 
+
+export function GetModule(name?: string) {
+    
+    if(!name || name === ""){
+        return MODULE_PATH;
+    }
+    
+    return MODULE_PATH+name+"/";
+}
+
 export function Log(source: string, message: string, obj?: any, level?: 'w'|'e'|'d'|'i'|"log"|"blank"){
     const l = `[${source}] ${message}`
     const c = console;
