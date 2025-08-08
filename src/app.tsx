@@ -24,7 +24,7 @@ export default function App() {
                             <NavItem to="/photos">Screenshoty</NavItem>
                         </ul>
                         <ul class="ml-auto items-center flex">
-                            <NavItem nohighlight splash class="mr-1.5 md:mr-6" to="/status"><button>🟢</button> Online: 0/100</NavItem>
+                            <NavItem nohighlight splash class="mr-1.5 md:mr-6" to="/status">🟢 Online: 0/100</NavItem>
                             <NavItem to="/account">Zaloguj się</NavItem>
                         </ul>
                     </nav>
