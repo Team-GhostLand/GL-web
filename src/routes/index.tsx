@@ -31,7 +31,7 @@ export default function Index() {
                     width={300}
                     height={500}
                     class="mb-5 md:mb-10"
-                    icon="/discord.gif"
+                    throbber="/discord.gif"
                     icon_h={100}
                     icon_w={100}
                 />

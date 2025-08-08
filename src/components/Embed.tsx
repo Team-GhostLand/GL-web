@@ -3,7 +3,16 @@ import { ClientOnly } from "~/components/ClientOnly";
 import NoJsTaunter from "./NoJsTaunter";
 import { Log } from "~/lib/utils";
 
-export default function Embed(props: {website: string, class: string, height: number, width: number, fancy_scaler?:true}&({icon: string, icon_h: number, icon_w: number}|{icon?: undefined, icon_h?: undefined, icon_w?: undefined})){
+export type EmbedProps = (
+    {
+        website: string, class: string, height: number, width: number, fancy_scaler?:true
+    } & (
+        {throbber?: undefined, icon_h?: number, icon_w?: number} //It doesn't matter whether you set h and/or w...
+        | {throbber: string, icon_h: number, icon_w: number}     //...until you define the trobber - then you have to set both.
+    )
+)
+
+export default function Embed(props: EmbedProps){
     let [getIsLoaded, setIsLoaded] = createSignal(false);
 
     onMount(() => Log("Embed", "Ładowanie strony: "+props.website))
@@ -27,7 +36,7 @@ export default function Embed(props: {website: string, class: string, height: nu
                 <div class="flex flex-col" style="grid-row: 1; grid-column: 1;">
                     <span class="m-auto mb-2 text-slate-500 text-2xl">Ładowanie...</span>
                     <img
-                        src={props.icon}
+                        src={props.throbber}
                         height={props.icon_h}
                         width={props.icon_w}
                         class="mx-auto my-2"

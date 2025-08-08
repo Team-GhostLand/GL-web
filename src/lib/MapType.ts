@@ -1,4 +1,4 @@
-export type MapType = "gra"|"gra-dynmap"|"city"|"world"|"home"|"unknown";
+export type MapType = "gra"|"gra-dynmap"|"regions"|"home"|"unknown";
 export type MapValidityState = "real-valid"|"abstract-valid"|"implicit-unknown"|"explicit-unknown"|"missing";
 export type MapValidityTier = 1 | 2 | 3;
 
@@ -9,8 +9,7 @@ export function getMapValidityState(map?: MapType): MapValidityState { // Tak na
     switch(map){
         case "gra":
         case "gra-dynmap":
-        case "city":
-        case "world":
+        case "regions":
             return "real-valid";
         case "home":
             return "abstract-valid";

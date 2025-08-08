@@ -22,14 +22,11 @@ export function MapSelector(props: {type: MapType}) {
             <A href="/map/gra" class={COMMON+" rounded-l-md " + ((props.type === "gra") ? ACTIVE : INACTIVE)}>
                 Kolej
             </A>
-            <A href="/map/gra-dynmap" class={COMMON+" border-l-slate-600 border-l-2 " + ((props.type === "gra-dynmap") ? ACTIVE : INACTIVE)}>
+            <A href="/map/gra-dynmap" class={COMMON+" border-x-slate-600 border-x-2 " /*tylko ostatni-środkowy ma border-x - wsystkie przed nim mają mieć border-l, jeśli miałyby się pojawić*/ + ((props.type === "gra-dynmap") ? ACTIVE : INACTIVE)}>
                 Kolej (dyn.)
             </A>
-            <A href="/map/city" class={COMMON+" border-x-slate-600 border-x-2 " + ((props.type === "city") ? ACTIVE : INACTIVE)}>
-                Miasto
-            </A>
-            <A href="/map/world" class={COMMON+" rounded-r-md " + ((props.type === "world") ? ACTIVE : INACTIVE)}>
-                Świat
+            <A href="/map/regions" class={COMMON+" rounded-r-md " + ((props.type === "regions") ? ACTIVE : INACTIVE)}>
+                Region(y)
             </A>
         </nav>
     );
