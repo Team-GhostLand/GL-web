@@ -4,7 +4,7 @@ import { Log } from "~/lib/utils";
 
 
 function updateMouseSignals(setX: Function, setY: Function, markMoved: Function, vec: any){
-    if (window.matchMedia("(pointer: coarse)").matches) return; //Ignorowanie na telefonach
+    if (window.matchMedia("(pointer: coarse)").matches) return; //Ignorowanie na telefonach (bo inaczej tło by skakało do punktów dotknięcia, co raczej nie wyglądałoby za dobrze)
     markMoved(true);
     setX(vec.clientX);
     setY(vec.clientY);
@@ -54,10 +54,11 @@ export default function Background() {
 
         if (bg) {
 
-            if(wx && wy) { //Będą nullami na telefonach - Patrz: line 6
+            if(wx && wy) { //Będą nullami na telefonach - Patrz: line 7
                 bg.style.transform = "translateX("+calcTransform(x, wx)+"%) translateY("+calcTransform(y, wy)+"%) scale(1.15)";
             }
 
+            //This is so that the background doesn't render instantly when the image downloads (which looked janky), but waits for your first mose move (or screen tap on a phone)
             if (moved && !moveHandled) {
                 bg.style.opacity = "100%";
                 bg.style.animation = "fadeIn 2s";
@@ -66,6 +67,7 @@ export default function Background() {
         }
         
         else if (!getIsFirstRun()) {
+            //The first-run happens before we get to line 47 (before calling return()), instead of being triggered by the signals (which itself are triggered by mouse movements and/or window resizes). But anything subsequent should only be triggered by mouse movemet and/or window resizes - which should only be handled by the browser after the execution of the current function finished, aka return() was called, aka the <div> should exist. If it doesn't (probably becasue someone messed around with Inspect Element) - well, that's a universe violation!
             Log("Background", "UNIVERSE VIOLATION DETECTED: BACKGROUND DIV MISSING ON NON-FIRST RUN!", null, "e");
         }
 
