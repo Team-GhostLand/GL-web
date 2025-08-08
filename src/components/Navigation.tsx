@@ -13,6 +13,11 @@ type NavItemProps = (
     )
 )
 
+function doesAdressMatch(props: NavItemProps, loc: Location<unknown>){
+    if (props.to.split("/")[0].length > 0 ) /*AKA „if it's the URL doesn't start with just a /”*/ return false; //Becasue we can't really compare those (whether they be relaitive links, like ../ (idk why you'd do that - maybe for a back button, or something) or completley external ones, like https://<...>)
+
+    return (props.to.split("/")[1] === loc.pathname.split("/")[1]);
+}
 
 function generateClasses(props: NavItemProps, loc: Location<unknown>, winx: number|null){
     
@@ -22,13 +27,13 @@ function generateClasses(props: NavItemProps, loc: Location<unknown>, winx: numb
         if(tw_sm) console.log("wykryto małe okno");
     }
 
-    return (((props.to.split("/")[1] === loc.pathname.split("/")[1]) && !props.nohighlight)
+    return ((doesAdressMatch(props, loc) && !props.nohighlight)                         //Responsible for highligting the bottom...
         ?
-        "border-sky-600 sm:border-b-2"
+        "border-sky-600 sm:border-b-2"                                                  //...if the adress matches and we're not in no-highlight mode, or...
         :
-        `border-transparent border-b-2 ${props.nohighlight? "":"hover:border-sky-600"}`
+        `border-transparent border-b-2 ${props.nohighlight? "":"hover:border-sky-600"}` //...If the adress didn't match, but we're hovering over it (that latter isn't checked here; only in CSS - tho said CSS is applied here, based on whether we're in no-highlight mode). Meanwhile...
     )
-    + ((!(props.to.split("/")[1] === loc.pathname.split("/")[1]) && !props.hamburgermode)
+    + (!(doesAdressMatch(props, loc) && !props.hamburgermode)                           //...this is COMPLETELY unrelated to that.
         ?
         " hidden sm:inline border-transparent" //TODO: Implement hamburger-mode correctly (or disable it this functionality for the time being) becasue - right now - all that happens is that nav elements disappear on smaller screens (eg. mobile) becasue of that pesky „hidden” (that only gets overriden by „sm:inline” once „sm:”'s threshold is met - said threshold happens to be 640px (what's being checked on line 20), which is why this „bug” (or rather - now, knowing the context - intentional, but unfinished behaviour) took me a whoping 1,5h to locate: I kept thinking that it has something to do with that (very obviously usless, but I had no other leads) code on line 20).
         :
@@ -64,6 +69,6 @@ export function NavItem(props: NavItemProps) {
 
 export function LilGhost(){
     return(<A href="/">
-        <img src="/icon-modern.png" width="64" height="64" class="mx-1.5 md:mx-6 min-w-16 sm:hover:scale-110"/>
+        <img src="/icon-legacy.webp" width="64" height="64" class="mx-1.5 md:mx-6 min-w-16 sm:hover:scale-110 img-pixelated"/>
     </A>)
 }

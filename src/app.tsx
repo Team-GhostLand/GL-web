@@ -21,7 +21,7 @@ export default function App() {
                             <LilGhost/>
                             <NavItem to={GetModule("ci")}>Pliki</NavItem>
                             <NavItem to="/map">Mapa</NavItem>
-                            <NavItem to="/photos">Screenshoty</NavItem>
+                            <NavItem to="/photos" last>Screenshoty</NavItem>
                         </ul>
                         <ul class="ml-auto items-center flex">
                             <NavItem nohighlight splash class="mr-1.5 md:mr-6" to="/status">🔵 {"${status}"}</NavItem>
