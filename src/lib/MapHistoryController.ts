@@ -1,4 +1,5 @@
 import { isMapValid, type MapType } from "~/lib/MapType";
+import { Log } from "./utils";
 
 const ItemID = "last_viewed_map";
 let Store: Storage|undefined;
@@ -13,7 +14,7 @@ export function findNavTarget(): MapType {
 }
 
 export function MhcLog(message: string){
-    console.log(`[MapHist Controller] ${message}: ${get()}  @  URL: ${window.location.href}`);
+    Log("MapHist Controller", `${message}: ${get()}  @  URL: ${window.location.href}`);
 }
 
 function access(){
