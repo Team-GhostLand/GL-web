@@ -9,7 +9,7 @@ export function findNavTarget(): MapType {
     let target = get();
     
     if(isMapValid(target)) return target;
-    else return "city"; //Nie musi być else, ale tak lepiej wygląda imo
+    else return "regions"; //Nie musi być else, ale tak lepiej wygląda imo
 }
 
 export function MhcLog(message: string){
