@@ -5,7 +5,7 @@ import GlitchyGhost from "~/components/GlitchyGhost";
 import T from "~/components/T";
 import { GetModule } from "~/lib/utils";
 
-export default function Index() {
+export default function LandingPage() {
     return (
         <div class="p-4 flex flex-wrap">
             <T/>
