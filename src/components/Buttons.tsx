@@ -13,8 +13,8 @@ export default function Button(props: {children: any, onclick?: JSX.EventHandler
 }
 
 
-export function LinkButton(props: {children: any, to: string, class?: string, style?: string}){
-    return <A href={props.to}>
+export function LinkButton(props: {children: any, to: string, class?: string, style?: string, target?:string, rel?:string}){
+    return <A href={props.to} target={props.target} rel={props.rel}>
         <Button style={props.style} class={props.class}>
             {props.children}
         </Button>

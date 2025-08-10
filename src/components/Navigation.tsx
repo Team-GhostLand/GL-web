@@ -5,9 +5,9 @@ import { Log } from "~/lib/utils";
 
 type NavItemProps = (
     {
-        to: string, children:any,                  //Use your brain
-        nohighlight?:true, hamburgermode?:boolean, //Hamburger mode - whether the Hamburger Menu is open; nohighlight - stops ALL highligting (both hover and URL-matched)
-        splash?:true, smallonly?:true              //Splash - a splash-screen, so something that should show in both small and big views; smallonly - will not show in big views; DEFAULT: Only shows in big views, unless currently selected or the Hamburger Menu is currently open (*this behaviour was probably supposed to override the splash screen).
+        to: string, children:any, target?:string, rel?:string, //Stuff from the <A/> component
+        nohighlight?:true, hamburgermode?:boolean,             //Hamburger mode - whether the Hamburger Menu is open; nohighlight - stops ALL highligting (both hover and URL-matched)
+        splash?:true, smallonly?:true                          //Splash - a splash-screen, so something that should show in both small and big views; smallonly - will not show in big views; DEFAULT: Only shows in big views, unless currently selected or the Hamburger Menu is currently open (*this behaviour was probably supposed to override the splash screen).
     } & (
         {last?:true, class?: undefined} |
         {last?:undefined, class?: string}
@@ -63,7 +63,7 @@ export function NavItem(props: NavItemProps) {
     const margins = props.class ? props.class : `mx-1.5 md:mx-6 ${props.last ? "mr-6 md:mr-20":""}`;
     return (
         <li class={`${getClasses()} ${margins} ${props.nohighlight ? "" : "sm:hover:pb-px"}`}>
-            <A href={props.to}>{props.children}</A>
+            <A href={props.to} target={props.target} rel={props.rel}>{props.children}</A>
         </li>
     );
 }
