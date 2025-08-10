@@ -19,7 +19,7 @@ export default function App() {
                     <nav class="backdrop-blur-lg fixed top-0 w-full overflow-x-scroll flex text-xl font-light text-gray-200 text-nowrap">
                         <ul class="flex items-center">
                             <LilGhost/>
-                            <NavItem to={GetModule("ci")} target="_self">Pliki</NavItem>
+                            <NavItem to={GetModule("ci")+"?sort=time&order=desc"} target="_self">Pliki</NavItem>
                             <NavItem to="/map">Mapa</NavItem>
                             <NavItem to="/photos" last>Screenshoty</NavItem>
                         </ul>
