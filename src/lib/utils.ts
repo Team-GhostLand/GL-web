@@ -1,4 +1,4 @@
-export const MODULE_PATH = "http://130.162.246.47:25575/modules/" //We can't just use the `/modules/` prefix because it would make local development cumbersome becasue you'd need to have a the GhostLand webserver running, or have weird issues - like /map/gra-dynmap embedding the GhostLand website recursievly). In theory, we could eventually set up something inside GetModule that checks whether we're running dev or prod - but even then, this const here would still be useful, in case it turns out that we are, in fact, running dev.
+export const MODULE_PATH = "http://ghostland.ovh:25575/modules/" //We can't just use the `/modules/` prefix because it would make local development cumbersome becasue you'd need to have a the GhostLand webserver running, or have weird issues - like /map/gra-dynmap embedding the GhostLand website recursievly). In theory, we could eventually set up something inside GetModule that checks whether we're running dev or prod - but even then, this const here would still be useful, in case it turns out that we are, in fact, running dev.
 
 export function GetModule(name?: string) {
     
