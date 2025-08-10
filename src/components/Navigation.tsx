@@ -5,9 +5,9 @@ import { Log } from "~/lib/utils";
 
 type NavItemProps = (
     {
-        to: string, children:any,               //Use your brain
-        nohighlight?:true, hamburgermode?:true, //Hamburger mode - whether the Hamburger Menu is open; nohighlight - stops ALL highligting (both hover and URL-matched)
-        splash?:true, smallonly?:true           //Splash - a splash-screen, so something that should show in both small and big views; smallonly - will not show in big views; DEFAULT: Only shows in big views, unless currently selected (*this behaviour was probably supposed to override the splash screen).
+        to: string, children:any,                  //Use your brain
+        nohighlight?:true, hamburgermode?:boolean, //Hamburger mode - whether the Hamburger Menu is open; nohighlight - stops ALL highligting (both hover and URL-matched)
+        splash?:true, smallonly?:true              //Splash - a splash-screen, so something that should show in both small and big views; smallonly - will not show in big views; DEFAULT: Only shows in big views, unless currently selected or the Hamburger Menu is currently open (*this behaviour was probably supposed to override the splash screen).
     } & (
         {last?:true, class?: undefined} |
         {last?:undefined, class?: string}
@@ -35,11 +35,11 @@ function generateClasses(props: NavItemProps, loc: Location<unknown>, winx: numb
         :
         `border-transparent border-b-2 ${props.nohighlight? "":"hover:border-sky-600"}` //...If the adress didn't match, but we're hovering over it (that latter isn't checked here; only in CSS - tho said CSS is applied here, based on whether we're in no-highlight mode). Meanwhile...
     )
-    + (!(doesAdressMatch(props, loc) && !props.hamburgermode)                           //...this is COMPLETELY unrelated to that.
+    + ((doesAdressMatch(props, loc) && !props.hamburgermode)                           //...this is COMPLETELY unrelated to all of that.
         ?
-        " hidden sm:inline border-transparent" //TODO: Implement the hamburger menu (or disable it this functionality for the time being) becasue - right now - all that happens is that nav elements disappear on smaller screens (eg. mobile) becasue of that pesky „hidden” (that only gets overriden by „sm:inline” once „sm:”'s threshold is met - said threshold happens to be 640px (what's being checked on line 20), which is why this „bug” (or rather - now, knowing the context - intentional, but unfinished behaviour) took me a whoping 1,5h to locate: I kept thinking that it has something to do with that (very obviously usless, but I had no other leads) code on line 20).
+        "" //When the hamburger menu is CLOSED and the adresses matched (which is what the check above does) - we do nothing. Border hiding/showing is handled above (to only show on bigger screens) and the element is SUPPOSED to be shown (so no „hidden sm:inline” needs to be set) when adresses matched, regardless of whether the screen is big or small.
         :
-        ""
+        " hidden-DISABLED-FOR-NOW-AND-REPLACED-WITH-EVERPRESENT-INLINE inline sm:inline border-transparent" //This happens if either: the hamburger menu is open (TODO: Add an alternative method of rendering for this occasion - neither hidden (becasue that makes it impossible to actually see the contents of the hamburger menu) nor inline (becasue the very point of a hamburger menu is to not have all the things inline, but one on top of the other)), regardless of whether the adresses matched  -  OR if the adresses didn't match and the hamburger menu is closed, in which case: a) we want all unmatched menu entries to hide (TODO: except the splash, if we're on the homescreen) on smaller screens becasue they don't have enough room to show them all anyway (NOTE: right now, this functionality is disabled becasue the Hamburger menu system isn't implemented - TODO: Implement it, and re-enable this); b) border-transparent doesn't do anything noteworthy (it's already being set in the above step, if the adresses didn't match)
     )
 }
 
