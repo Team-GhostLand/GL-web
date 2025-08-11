@@ -23,8 +23,12 @@ function calcTransform(mouse: number|null, window: number): number{
 
 function randomWallpaper(): string{
     const options = [
-        //"https://media.discordapp.net/attachments/1079471622232211526/1267859704571363438/2024-07-25_23.03.12.png?ex=66aeef1d&is=66ad9d9d&hm=c97aa0787d449f5e7bfb42f0d31e4e793c001491accfe8f817c40495f7103483&=&format=webp",
-        "https://images.hdqwalls.com/wallpapers/bthumb/landscape-alpine-mountains-landscape-5k-1k.jpg"
+        "/bg43.webp",
+        "/bg42.webp",
+        "/bg41.webp",
+        "/bg40.webp",
+        "/bg39.webp",
+        "/bg38.webp"
     ]
     const index = Math.floor(Math.random()*options.length);
     return options[index];

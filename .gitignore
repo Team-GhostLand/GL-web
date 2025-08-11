@@ -171,3 +171,8 @@ gitignore
 # System Files
 .DS_Store
 Thumbs.db
+
+
+
+#   === TO MAKE SURE I WON'T BLOW UP GITHUB BY PASTING AN UNCOMPRESSED LIBRARY OF BACKGROUNDS ===
+public/bg*.png
