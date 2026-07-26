@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ScreenshotsRouteImport } from './routes/screenshots'
 import { Route as LoreRouteImport } from './routes/lore'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ScreenshotsRoute = ScreenshotsRouteImport.update({
+  id: '/screenshots',
+  path: '/screenshots',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoreRoute = LoreRouteImport.update({
   id: '/lore',
   path: '/lore',
@@ -26,31 +32,42 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/lore': typeof LoreRoute
+  '/screenshots': typeof ScreenshotsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/lore': typeof LoreRoute
+  '/screenshots': typeof ScreenshotsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/lore': typeof LoreRoute
+  '/screenshots': typeof ScreenshotsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/lore'
+  fullPaths: '/' | '/lore' | '/screenshots'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/lore'
-  id: '__root__' | '/' | '/lore'
+  to: '/' | '/lore' | '/screenshots'
+  id: '__root__' | '/' | '/lore' | '/screenshots'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoreRoute: typeof LoreRoute
+  ScreenshotsRoute: typeof ScreenshotsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/screenshots': {
+      id: '/screenshots'
+      path: '/screenshots'
+      fullPath: '/screenshots'
+      preLoaderRoute: typeof ScreenshotsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lore': {
       id: '/lore'
       path: '/lore'
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoreRoute: LoreRoute,
+  ScreenshotsRoute: ScreenshotsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
