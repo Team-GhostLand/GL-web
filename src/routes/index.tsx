@@ -10,10 +10,10 @@ import { BANNER_URL } from "@/lib/assets";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "GhostLand 8.0 — półprywatny modpack Minecraft" },
-      { name: "description", content: "Odliczanie do startu 8. edycji GhostLand: mrocznego, immersyjnego modpacka Fabric 1.20.1. Pobierz paczkę i dołącz przez Discord." },
-      { property: "og:title", content: "GhostLand 8.0 — półprywatny modpack Minecraft" },
-      { property: "og:description", content: "Odliczanie do startu 8. edycji GhostLand: mroczny, immersyjny modpack Fabric 1.20.1." },
+      { title: "GhostLand 8.0 — prywatny modpack Minecraft" },
+      { name: "description", content: "Odliczanie do startu 8. edycji GhostLand: mrocznego, immersyjnego modpacka NEOFORGE 1.21.1. Pobierz paczkę i dołącz przez Discord." },
+      { property: "og:title", content: "GhostLand 8.0 — prywatny modpack Minecraft" },
+      { property: "og:description", content: "Odliczanie do startu 8. edycji GhostLand: mroczny, immersyjny modpack NEOFORGE 1.21.1." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
