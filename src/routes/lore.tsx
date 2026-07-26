@@ -17,7 +17,7 @@ export const Route = createFileRoute("/lore")({
 
 const editions = [
   { n: 1, title: "Genesis", note: "Iwo (JIFO) tworzy sukcesora szkolnego serwera Minecraft." },
-  { n: 2, title: "Rozbudowa", note: "Formuje się rdzeń społeczności." },
+  { n: 2, title: "Rozbudowa", note: "Formuje się rdzeń społeczności, powstaje serwer na discordzie, pierwsze osoby oferują pomoc" },
   { n: 3, title: "Automatyka", note: "Pierwsze eksperymenty z modami technicznymi." },
   { n: 4, title: "Kolej", note: "Powstaje GRA — GhostLand Railway Administration." },
   { n: 5, title: "Złota Era", highlight: true, note: "Najbardziej pamiętna edycja — najwięcej się działo." },
