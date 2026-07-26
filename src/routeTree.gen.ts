@@ -9,8 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ScreenshotsRouteImport } from './routes/screenshots'
+import { Route as LoreRouteImport } from './routes/lore'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as DownloadRouteImport } from './routes/download'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ScreenshotsRoute = ScreenshotsRouteImport.update({
+  id: '/screenshots',
+  path: '/screenshots',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoreRoute = LoreRouteImport.update({
+  id: '/lore',
+  path: '/lore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DownloadRoute = DownloadRouteImport.update({
+  id: '/download',
+  path: '/download',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +49,90 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/download': typeof DownloadRoute
+  '/login': typeof LoginRoute
+  '/lore': typeof LoreRoute
+  '/screenshots': typeof ScreenshotsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/download': typeof DownloadRoute
+  '/login': typeof LoginRoute
+  '/lore': typeof LoreRoute
+  '/screenshots': typeof ScreenshotsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/download': typeof DownloadRoute
+  '/login': typeof LoginRoute
+  '/lore': typeof LoreRoute
+  '/screenshots': typeof ScreenshotsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/admin' | '/download' | '/login' | '/lore' | '/screenshots'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/admin' | '/download' | '/login' | '/lore' | '/screenshots'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/download'
+    | '/login'
+    | '/lore'
+    | '/screenshots'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  DownloadRoute: typeof DownloadRoute
+  LoginRoute: typeof LoginRoute
+  LoreRoute: typeof LoreRoute
+  ScreenshotsRoute: typeof ScreenshotsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/screenshots': {
+      id: '/screenshots'
+      path: '/screenshots'
+      fullPath: '/screenshots'
+      preLoaderRoute: typeof ScreenshotsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lore': {
+      id: '/lore'
+      path: '/lore'
+      fullPath: '/lore'
+      preLoaderRoute: typeof LoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/download': {
+      id: '/download'
+      path: '/download'
+      fullPath: '/download'
+      preLoaderRoute: typeof DownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +145,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  DownloadRoute: DownloadRoute,
+  LoginRoute: LoginRoute,
+  LoreRoute: LoreRoute,
+  ScreenshotsRoute: ScreenshotsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
