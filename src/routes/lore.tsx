@@ -17,21 +17,21 @@ export const Route = createFileRoute("/lore")({
 
 const editions = [
   { n: 1, title: "Genesis", note: "Iwo (JIFO) tworzy sukcesora szkolnego serwera Minecraft." },
-  { n: 2, title: "Rozbudowa", note: "Formuje się rdzeń społeczności, powstaje serwer na discordzie, pierwsze osoby oferują pomoc" },
-  { n: 3, title: "Automatyka", note: "Pierwsze eksperymenty z modami technicznymi." },
-  { n: 4, title: "Kolej", note: "Powstaje GRA — GhostLand Railway Administration." },
-  { n: 5, title: "Złota Era", highlight: true, note: "Najbardziej pamiętna edycja — najwięcej się działo." },
+  { n: 2, title: "Rozbudowa PROJEKTU", note: "Formuje się rdzeń społeczności, powstaje serwer na discordzie, pierwsze osoby oferują pomoc." },
+  { n: 3, title: "FABRIC", note: "Pierwsze eksperymenty z przejściem na Fabric modloader i tego konswkwencje." },
+  { n: 4, title: "Kolej", note: "Powstaje GRA - GhostLand Railway Administration i zaczyna bardzo prężnie działać na rzecz GhostLanda" },
+  { n: 5, title: "Złota Era", highlight: true, note: "Najbardziej pamiętna edycja - najwięcej się działo." },
   { n: 6, title: "Ekspansja", note: "Nowe organizacje, nowe biomy, dojrzałe pipeline'y devopsowe." },
-  { n: 7, title: "Immersja", note: "Nacisk na atmosferę i storytelling." },
-  { n: 8, title: "Nadchodząca", highlight: true, note: "Fabric 1.20.1. Będzie jeszcze lepsza niż piątka." },
+  { n: 7, title: "Immersja", note: "Nacisk na politykę monetarną i trochę dziwnych pierdoletów, ale było fajnie!" },
+  { n: 8, title: "Nadchodząca", highlight: true, note: "Neoforge 1.21.1, będzie jelszcze lepsza niż 5tka!" },
 ];
 
 const crew = [
-  { name: "JIFO", role: "Pomysłodawca, główny menedżer, oryginalny twórca", icon: Crown },
-  { name: "Guzio", role: "Genialny architekt, orchiestrator systemów", icon: Compass },
-  { name: "Midnight", role: "Architekt doświadczenia gracza", icon: Ghost },
+  { name: "JIFO", role: "Pomysłodawca, główny menedżer, oryginalny twórca, marketingowiec", icon: Crown },
+  { name: "Guzio", role: "Genialny architekt, orchiestrator systemów, budowniczy devopsów", icon: Compass },
+  { name: "Midnight", role: "Świetny architekt doświadczenia gracza i struktury modpacka", icon: Ghost },
   { name: "Kanapkos", role: "Specjalista od worldgenu i struktur", icon: TreePine },
-  { name: "DjPalemkov", role: "Fabryki i mody techniczne", icon: Hammer },
+  { name: "DjPalemkov", role: "Spec od fabryki i modów technicznych", icon: Hammer },
 ];
 
 const orgs = [
@@ -116,7 +116,7 @@ function LorePage() {
           ))}
         </div>
         <p className="mt-6 text-sm text-muted-foreground">
-          Każda edycja to setki godzin ekipy — zwłaszcza pierwszej trójki — żeby GhostLand był jak najciekawszym
+          Każda edycja to setki godzin ekipy, zwłaszcza pierwszej trójki żeby GhostLand był jak najciekawszym
           doświadczeniem.
         </p>
       </section>
@@ -175,7 +175,7 @@ function LorePage() {
       <section className="mt-16 glass rounded-2xl p-8 text-center">
         <h2 className="font-heading text-2xl text-ghost">Zamknięta whitelista</h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
-          GhostLandy mają zamkniętą strukturę — wejście tylko z polecenia albo przez JIFO. Rygorystyczna whitelista
+          GhostLandy mają zamkniętą strukturę, więc wejście tylko z polecenia albo przez JIFO. Rygorystyczna whitelista
           gwarantuje dobrą atmosferę i to, że wszyscy grają fair.
         </p>
       </section>
