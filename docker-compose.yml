@@ -1,0 +1,17 @@
+# jifocc-managed — ghostland (nitro node-server)
+services:
+  web:
+    image: node:22-alpine
+    container_name: web-ghostland
+    restart: unless-stopped
+    working_dir: /app
+    command: ["node", ".output/server/index.mjs"]
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3000"
+      NITRO_HOST: "0.0.0.0"
+      NITRO_PORT: "3000"
+    ports:
+      - "8083:3000"
+    volumes:
+      - /home/jifo/websites/ghostland:/app:ro

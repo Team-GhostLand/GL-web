@@ -7,7 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# Node
+./node_modules
 dist
 dist-ssr
 .output
@@ -17,12 +18,12 @@ dist-ssr
 *.local
 
 # Wrangler / Cloudflare
-.wrangler/
+./.wrangler/
 .dev.vars
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+./.vscode/*
+!./.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
@@ -32,5 +33,5 @@ dist-ssr
 *.sw?
 
 # status dumps
-status.json
-public/status.json
+./status.json
+./public/status.json

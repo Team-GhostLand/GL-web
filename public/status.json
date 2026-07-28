@@ -1,0 +1,33 @@
+{
+  "updated_at": "2026-07-27T12:28:40.620899+02:00",
+  "timestamp": 1785148120,
+  "node_name": "lenovo-server",
+  "server": {
+    "online": true,
+    "cpu_pct": 1,
+    "ram_pct": 16,
+    "temp_c": 29,
+    "gpu_pct": 0,
+    "docker_mc": "OFFLINE"
+  },
+  "minecraft": {
+    "status": "OFFLINE",
+    "container_running": false,
+    "active_instance": null,
+    "active_instance_name": null,
+    "active_world": null,
+    "players_online": 0,
+    "players_max": 0,
+    "version": "?",
+    "motd": "",
+    "server_icon": {
+      "exists": false,
+      "url": null
+    },
+    "worlds": [],
+    "instances": [
+      "ghostland8",
+      "igalands"
+    ]
+  }
+}
