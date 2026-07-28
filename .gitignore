@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Node
-./node_modules
+node_modules
 dist
 dist-ssr
 .output
@@ -33,5 +33,4 @@ dist-ssr
 *.sw?
 
 # status dumps
-./status.json
-./public/status.json
+status.json
