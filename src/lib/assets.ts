@@ -16,18 +16,21 @@ export type Screenshot = {
   id: string;
   url: string;
   title: string;
-  category: "Budowle" | "Krajobrazy" | "Fabryki" | "Ekipa";
+  category: "Budowle" | "Krajobrazy" | "Fabryki" | "Ekipa" | string;
+  description?: string;
+  date?: string;
+  edition?: number;
 };
 
 export const WORLD_SCREENSHOTS: Screenshot[] = [
-  { id: "swiat", url: swiat.url, title: "Świat GhostLand", category: "Krajobrazy" },
-  { id: "tower", url: tower.url, title: "Wielka Wieża we mgle", category: "Budowle" },
-  { id: "lostnisko", url: lostnisko.url, title: "Lotnisko GAY", category: "Budowle" },
-  { id: "fabryka", url: fabryka.url, title: "Wielka fabryka nocą", category: "Fabryki" },
-  { id: "evil", url: evilFactory.url, title: "Kotłownia zła", category: "Fabryki" },
-  { id: "cozy", url: cozy.url, title: "Przytulne wnętrze", category: "Budowle" },
-  { id: "bar", url: sunsetBar.url, title: "Bar o zachodzie", category: "Budowle" },
-  { id: "group", url: groupPhoto.url, title: "Ekipa GhostLand", category: "Ekipa" },
+  { id: "swiat", url: swiat.url, title: "Świat GhostLand", category: "Krajobrazy", date: "2021-01-01", description: "Malowniczy krajobraz świata GhostLand z perspektywy lotu ptaka." },
+  { id: "tower", url: tower.url, title: "Wielka Wieża we mgle", category: "Budowle", date: "2021-01-01", description: "Monumentalna wieża wyłaniająca się z gęstej mgły." },
+  { id: "lostnisko", url: lostnisko.url, title: "Lotnisko GAY", category: "Budowle", date: "2021-01-01", description: "Główne pasy startowe i terminal węzła lotniczego." },
+  { id: "fabryka", url: fabryka.url, title: "Wielka fabryka nocą", category: "Fabryki", date: "2021-01-01", description: "Nocne oświetlenie industrialnej części GhostLand." },
+  { id: "evil", url: evilFactory.url, title: "Kotłownia zła", category: "Fabryki", date: "2021-01-01", description: "Serce podziemnego kompleksu technologicznego." },
+  { id: "cozy", url: cozy.url, title: "Przytulne wnętrze", category: "Budowle", date: "2021-01-01", description: "Ciepła baza mieszkalna z kominkiem i widokiem." },
+  { id: "bar", url: sunsetBar.url, title: "Bar o zachodzie", category: "Budowle", date: "2021-01-01", description: "Strefa relaksu na świeżym powietrzu." },
+  { id: "group", url: groupPhoto.url, title: "Ekipa GhostLand", category: "Ekipa", date: "2021-01-01", description: "Wspólne zdjęcie graczy edycji." },
 ];
 
 export const PARALLAX_BACKGROUNDS = [

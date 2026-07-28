@@ -1,28 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAdminSettings } from "@/lib/admin-settings";
 import { useI18n } from "@/lib/i18n";
 import { fetchMcStatus, type McStatus } from "@/lib/mc-status";
 import { cn } from "@/lib/utils";
+import { RotateCw } from "lucide-react";
 
 export function StatusBadge({ className }: { className?: string }) {
   const { settings } = useAdminSettings();
   const { t } = useI18n();
   const [live, setLive] = useState<McStatus | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const loadStatus = useCallback(async (bypassCache = false) => {
+    if (settings.statusMode !== "auto") return;
+    setLoading(true);
+    try {
+      const data = await fetchMcStatus(settings.mcHost, bypassCache);
+      setLive(data);
+    } finally {
+      setLoading(false);
+    }
+  }, [settings.mcHost, settings.statusMode]);
 
   useEffect(() => {
-    let cancelled = false;
     if (settings.statusMode !== "auto") return;
-    const load = async () => {
-      const data = await fetchMcStatus(settings.mcHost);
-      if (!cancelled) setLive(data);
-    };
-    load();
-    const id = window.setInterval(load, 30_000);
-    return () => {
-      cancelled = true;
-      window.clearInterval(id);
-    };
-  }, [settings.mcHost, settings.statusMode]);
+    loadStatus(false);
+    const id = window.setInterval(() => loadStatus(false), 10_000);
+    return () => window.clearInterval(id);
+  }, [loadStatus, settings.statusMode]);
 
   let color = "text-muted-foreground";
   let dot = "bg-muted-foreground";
@@ -60,6 +65,16 @@ export function StatusBadge({ className }: { className?: string }) {
     >
       <span className={cn("h-2 w-2 rounded-full animate-pulse-dot", dot)} />
       <span className="whitespace-nowrap">{text}</span>
+      {settings.statusMode === "auto" && (
+        <button
+          type="button"
+          onClick={() => loadStatus(true)}
+          className="ml-1 opacity-70 transition-opacity hover:opacity-100 focus:outline-none"
+          title="Odśwież status"
+        >
+          <RotateCw className={cn("h-3 w-3", loading && "animate-spin")} />
+        </button>
+      )}
     </div>
   );
 }

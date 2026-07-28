@@ -28,9 +28,14 @@ function useCountdown(targetIso: string, paused: boolean, forceZero: boolean) {
 
 function Digit({ value, label }: { value: number; label: string }) {
   const padded = value.toString().padStart(2, "0");
+  const isLarge = padded.length > 2;
+  const fontSizeClass = isLarge
+    ? "text-3xl sm:text-5xl font-bold"
+    : "text-4xl sm:text-6xl font-bold";
+
   return (
-    <div className="glass flex flex-col items-center justify-center rounded-2xl px-4 py-5 sm:px-8 sm:py-6 min-w-[84px] sm:min-w-[120px]">
-      <div className="relative h-14 w-full overflow-hidden sm:h-20">
+    <div className="glass flex flex-col items-center justify-center rounded-2xl px-3 py-4 sm:px-6 sm:py-5 min-w-[76px] sm:min-w-[110px] w-auto transition-all">
+      <div className="relative flex h-12 w-full items-center justify-center overflow-hidden sm:h-16">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
             key={padded}
@@ -38,13 +43,13 @@ function Digit({ value, label }: { value: number; label: string }) {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 26 }}
-            className="absolute inset-0 flex items-center justify-center font-heading text-5xl font-bold tabular-nums text-ember sm:text-7xl"
+            className={`absolute inset-0 flex items-center justify-center font-heading tabular-nums text-ember ${fontSizeClass}`}
           >
             {padded}
           </motion.div>
         </AnimatePresence>
       </div>
-      <span className="mt-1 text-[10px] uppercase tracking-[0.25em] text-muted-foreground sm:text-xs">{label}</span>
+      <span className="mt-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:text-xs">{label}</span>
     </div>
   );
 }

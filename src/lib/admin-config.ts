@@ -10,5 +10,5 @@ export const ADMIN_SETTINGS_KEY = "gl_admin_settings";
 export const LANG_KEY = "gl_lang";
 
 export const DEFAULT_MC_HOST = "mc.ghostland.ovh";
-export const DEFAULT_DISCORD_INVITE = "https://discord.gg/ghostland";
+export const DEFAULT_DISCORD_INVITE = "https://discord.gg/SrhYP3HSX";
 export const DEFAULT_DISCORD_WIDGET_ID = "";

@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { LOGO_URL } from "@/lib/assets";
+import { Heart } from "lucide-react";
 
 export function Footer() {
   return (
@@ -15,6 +16,18 @@ export function Footer() {
             Poznaj lore
           </Link>
           .
+        </p>
+        <p className="inline-flex items-center gap-1.5 text-[11px] opacity-70">
+          Strona zrobiona z <Heart className="h-3 w-3 animate-pulse text-primary" /> przez Iwo —
+          <a
+            href="https://jifo.dev"
+            target="_blank"
+            rel="noreferrer"
+            className="group relative font-semibold text-foreground transition-colors hover:text-primary"
+          >
+            <span className="relative z-10">jifo.dev</span>
+            <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100" />
+          </a>
         </p>
       </div>
     </footer>

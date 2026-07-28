@@ -32,6 +32,17 @@ function Home() {
     { n: "1000+", label: t("stats.hours") },
   ];
 
+  const targetMs = new Date(settings.countdownTargetIso).getTime();
+  const countdownEnded = settings.countdownForceStart || targetMs <= Date.now();
+
+  const availableLinks = (settings.modpackLinks || []).filter((link) => {
+    if (!link.url || !link.url.trim()) return false;
+    if (link.onlyAfterCountdown && !countdownEnded) return false;
+    return true;
+  });
+
+  const firstLink = availableLinks[0];
+
   return (
     <main className="relative">
       <section className="relative flex min-h-[85vh] flex-col items-center justify-center px-4 pt-16 pb-24 text-center">
@@ -69,25 +80,43 @@ function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="glass rounded-2xl p-6"
+          className="glass rounded-2xl p-6 flex flex-col justify-between"
         >
-          <div className="flex items-center gap-2 text-primary">
-            <Download className="h-5 w-5" />
-            <h3 className="font-heading text-xl font-semibold">{t("download.title")}</h3>
+          <div>
+            <div className="flex items-center gap-2 text-primary">
+              <Download className="h-5 w-5" />
+              <h3 className="font-heading text-xl font-semibold">{t("download.title")}</h3>
+            </div>
+            {firstLink ? (
+              <>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {t("download.version")}: <span className="font-mono text-foreground font-semibold">{firstLink.version || "8.0.0"}</span> — {firstLink.label}
+                </p>
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <a
+                    href={firstLink.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition-all hover:scale-[1.02] glow-ember"
+                  >
+                    <Download className="h-5 w-5" />
+                    {t("download.cta")}
+                  </a>
+                  <Link to="/download" className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground">
+                    Wszystkie wersje ({availableLinks.length}) →
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <div className="mt-4">
+                <p className="font-heading text-lg font-bold text-ember">Do pobrania wkrótce!</p>
+                <p className="mt-1 text-xs text-muted-foreground">Paczka zostanie udostępniona po odliczaniu.</p>
+                <Link to="/download" className="mt-4 inline-block text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground">
+                  Zobacz stronę pobierania →
+                </Link>
+              </div>
+            )}
           </div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {t("download.version")}: <span className="font-mono text-foreground">{settings.modpackVersion}</span>
-          </p>
-          <a
-            href={settings.modpackUrl}
-            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition-all hover:scale-[1.02] glow-ember"
-          >
-            <Download className="h-5 w-5" />
-            {t("download.cta")}
-          </a>
-          <Link to="/download" className="ml-3 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground">
-            {t("download.howto")} →
-          </Link>
         </motion.div>
 
         <motion.div

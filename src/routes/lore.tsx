@@ -1,6 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Crown, Compass, Hammer, TreePine, TrainFront, Plane, Coins, Ghost } from "lucide-react";
+import {
+  Crown,
+  Compass,
+  Hammer,
+  TreePine,
+  TrainFront,
+  Plane,
+  Coins,
+  Ghost,
+  Archive,
+  Sparkles,
+  Building2,
+  Landmark,
+  Rocket,
+  ExternalLink,
+  Heart,
+} from "lucide-react";
 
 export const Route = createFileRoute("/lore")({
   head: () => ({
@@ -16,15 +32,57 @@ export const Route = createFileRoute("/lore")({
 });
 
 const editions = [
-  { n: 1, title: "Genesis", note: "Iwo (JIFO) tworzy sukcesora szkolnego serwera Minecraft." },
-  { n: 2, title: "Rozbudowa PROJEKTU", note: "Formuje się rdzeń społeczności, powstaje serwer na discordzie, pierwsze osoby oferują pomoc." },
-  { n: 3, title: "FABRIC", note: "Pierwsze eksperymenty z przejściem na Fabric modloader i tego konswkwencje." },
-  { n: 4, title: "Kolej", note: "Powstaje GRA - GhostLand Railway Administration i zaczyna bardzo prężnie działać na rzecz GhostLanda" },
-  { n: 5, title: "Złota Era", highlight: true, note: "Najbardziej pamiętna edycja - najwięcej się działo." },
-  { n: 6, title: "Ekspansja", note: "Nowe organizacje, nowe biomy, dojrzałe pipeline'y devopsowe." },
-  { n: 7, title: "Immersja", note: "Nacisk na politykę monetarną i trochę dziwnych pierdoletów, ale było fajnie!" },
-  { n: 8, title: "Nadchodząca", highlight: true, note: "Neoforge 1.21.1, będzie jelszcze lepsza niż 5tka!" },
-];
+  {
+    n: "1 & 2",
+    title: "Starożytne Akta",
+    icon: Archive,
+    note: "Nie mieliśmy wtedy dobrego systemu archiwizacji ani wersjonowania (np. 2.5.8 mogło być kompletnie nową edycją), a edycje były odklejone od światów (mogliśmy parę razy resetować świat na tej samej edycji). Finalnie doliczyliśmy się łącznie czterech edycji w okresie znanym oficjalnie jako „Edycje 1 i 2” (nie licząc pół-edycji, które też były w tym czasie koncepcją), dzięki niezbitemu dowodowi w postaci kanału #︱🎶・ed4-konkurs-muzyczny na Discordzie. Ta nazwa naprawdę nas uratowała! Niestety, nikt nie pamięta co dokładnie się podczas nich działo (a raczej, każdy pamięta coś innego i owe zapiski często ze sobą konfliktują), poza tym, że oryginalnie paczka działała na Forge+CurseForge, potem na Fabric+CF, a finalnie na Fabric+Modrinth — i tak już zostało.",
+  },
+  {
+    n: 3,
+    title: "Koleje Pustynne",
+    icon: TrainFront,
+    note: "Dodajemy Create, a wraz z nim dochodzą pociągi. Powstaje GRA — GhostLand Railway Administration — i zaczyna bardzo prężnie działać na rzecz GhostLanda. Jej głównym antagonistą staje się GeistWelt, który zaczyna budować sztuczną pustynię na planowanej trasie kolejowej, co budzi gniew KdSD (Komitetu do Spraw Depustynnienia, protoplasty GhostLand Tree Association), chcącego prezerwacji jak największej ilości naturalnego piękna Kontynentu GhostLanda. À propos tego — była to pierwsza edycja z systemem kontynentów.",
+  },
+  {
+    n: 4,
+    title: "W przestworza!",
+    icon: Plane,
+    note: "Główną zmianą było dodanie Man of Many Planes. W związku z tym powstało GAY — GhostLand Airplane Yeeters. Oryginalnie miało być parodią GRA, ale docelowo przerodziło się w ważny element ekosystemu GhostLand, wprowadzając standardy oznaczeń pasów na lotniskach. Jesteśmy pewni, że na edycji 8 — dzięki Create: Aeronautics — staną się jeszcze bardziej kluczowi.",
+  },
+  {
+    n: 5,
+    title: "Złota Era",
+    icon: Sparkles,
+    highlight: true,
+    note: "Najbardziej pamiętna edycja — najwięcej się działo. Wszyscy mieszkali bardzo blisko siebie, więc było dużo szans na interakcję. Niektóre z nich pozytywne (najbardziej rozłożysta sieć GRA w historii GhostLand), a inne bolesne (powstanie Hiroszimy i Nagasaki w miejscu domu jednego z graczy).",
+  },
+  {
+    n: 6,
+    title: "Ekspansja",
+    icon: Building2,
+    note: "Paczka była wyjątkowo oparta na NeoForge, bardzo eksperymentalna: brak Create i kontynentów, ale za to nowe organizacje, nowe biomy, dojrzałe pipeline'y devopsowe i dużo modów technicznych. Powstały na niej największe projekty architektoniczne w historii GhostLand, np. Dwie Wieże, i jest ogólnie bardzo pozytywnie oceniana przez wszystkich fanów modów technicznych.",
+  },
+  {
+    n: 7,
+    title: "Immersja",
+    icon: Landmark,
+    note: "Próba replikacji sukcesu piątki — powrót na Fabric i dużo interakcji. Tym razem jednak planowaliśmy wywołać zwiększone interakcje nie poprzez rozkaz budowy baz blisko, a poprzez wprowadzenie obfitego systemu roleplayu: nacisk na politykę monetarną dzięki Create: Numismatics, powstanie kanału na Discordzie dedykowanego pisaniu backstory i trochę innych takich pierdoletów. Było całkiem fajnie, chociaż część graczy zgłaszała, że była odrobinę przytłoczona.",
+  },
+  {
+    n: 8,
+    title: "Nadchodząca",
+    icon: Rocket,
+    highlight: true,
+    note: "NeoForge 1.21.1, a wraz z nim długo wyczekiwane przez prawie każdego w społeczności GhostLanda Create: Aeronautics. Dodatkowo, mocny focus na update'y z czasem. Zapowiada się na jeszcze lepszą niż piątka!",
+  },
+] as Array<{
+  n: number | string;
+  title: string;
+  icon: typeof Archive;
+  note: string;
+  highlight?: boolean;
+}>;
 
 const crew = [
   { name: "JIFO", role: "Pomysłodawca, główny menedżer, oryginalny twórca, marketingowiec", icon: Crown },
@@ -61,10 +119,10 @@ function LorePage() {
 
       <section className="mt-16">
         <h2 className="mb-6 font-heading text-2xl text-ember">Edycje</h2>
-        <div className="relative border-l-2 border-border/60 pl-6">
+        <div className="relative border-l-2 border-border/60 pl-6 ml-[14px]">
           {editions.map((e, i) => (
             <motion.div
-              key={e.n}
+              key={String(e.n)}
               initial={{ opacity: 0, x: -12 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -72,14 +130,18 @@ function LorePage() {
               className="relative mb-6"
             >
               <span
-                className={`absolute -left-[33px] top-1 flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold ${
+                className={`absolute -left-[37px] top-1 flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold ring-2 ring-background ${
                   e.highlight ? "bg-primary text-primary-foreground glow-ember" : "bg-muted text-muted-foreground"
                 }`}
               >
-                {e.n}
+                <e.icon className="h-3.5 w-3.5" />
               </span>
-              <div className={`glass rounded-xl p-4 ${e.highlight ? "border-primary/40" : ""}`}>
-                <div className="flex items-center gap-2">
+              <div className={`glass rounded-xl p-4 transition-transform hover:-translate-y-0.5 ${e.highlight ? "border-primary/40" : ""}`}>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${e.highlight ? "bg-primary/20 text-primary" : "bg-muted/60 text-muted-foreground"}`}>
+                    <e.icon className="h-3 w-3" />
+                    Edycja {e.n}
+                  </span>
                   <h3 className="font-heading text-lg font-semibold">
                     Edycja {e.n}: {e.title}
                   </h3>
@@ -89,10 +151,22 @@ function LorePage() {
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-muted-foreground">{e.note}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{e.note}</p>
               </div>
             </motion.div>
           ))}
+        </div>
+        <div className="mt-6 flex justify-center">
+          <a
+            href="https://ci.ghostland.ovh"
+            target="_blank"
+            rel="noreferrer"
+            className="group inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-5 py-2.5 text-xs font-semibold text-muted-foreground backdrop-blur-md transition-all hover:border-primary/60 hover:text-primary hover:shadow-[0_0_20px_-4px_hsl(var(--primary))]"
+          >
+            <Archive className="h-4 w-4 transition-transform group-hover:-rotate-6" />
+            Archiwum starych edycji
+            <ExternalLink className="h-3 w-3 opacity-60" />
+          </a>
         </div>
       </section>
 
@@ -179,6 +253,26 @@ function LorePage() {
           gwarantuje dobrą atmosferę i to, że wszyscy grają fair.
         </p>
       </section>
+
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mt-10 text-center text-xs text-muted-foreground"
+      >
+        <p className="inline-flex items-center gap-1.5">
+          Strona zrobiona z <Heart className="h-3.5 w-3.5 animate-pulse text-primary" /> przez Iwo —{" "}
+          <a
+            href="https://jifo.dev"
+            target="_blank"
+            rel="noreferrer"
+            className="group relative font-semibold text-foreground transition-colors hover:text-primary"
+          >
+            <span className="relative z-10">jifo.dev</span>
+            <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100" />
+          </a>
+        </p>
+      </motion.section>
     </main>
   );
 }

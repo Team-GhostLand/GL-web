@@ -9,9 +9,18 @@ import type { Screenshot } from "./assets";
 
 export type ServerStatusMode = "auto" | "online" | "maintenance" | "offline" | "started";
 
+export type ModpackLink = {
+  id: string;
+  label: string;
+  url: string;
+  version: string;
+  onlyAfterCountdown: boolean;
+};
+
 export type AdminSettings = {
   modpackUrl: string;
   modpackVersion: string;
+  modpackLinks: ModpackLink[];
   countdownTargetIso: string;
   countdownPaused: boolean;
   countdownForceStart: boolean;
@@ -30,9 +39,34 @@ const defaultTarget = () => {
   return d.toISOString();
 };
 
+export const DEFAULT_MODPACK_LINKS: ModpackLink[] = [
+  {
+    id: "link-1",
+    label: "Wersja Główna (.mrpack)",
+    url: "https://ghostland.ovh/downloads/GhostLand-v8.0.mrpack",
+    version: "8.0.0",
+    onlyAfterCountdown: false,
+  },
+  {
+    id: "link-2",
+    label: "Wersja Alternatywna",
+    url: "",
+    version: "8.0.0",
+    onlyAfterCountdown: false,
+  },
+  {
+    id: "link-3",
+    label: "Wersja Manualna (Zip)",
+    url: "",
+    version: "8.0.0",
+    onlyAfterCountdown: false,
+  },
+];
+
 export const DEFAULT_SETTINGS: AdminSettings = {
   modpackUrl: "https://ghostland.ovh/downloads/GhostLand-v8.0.mrpack",
   modpackVersion: "8.0.0",
+  modpackLinks: DEFAULT_MODPACK_LINKS,
   countdownTargetIso: defaultTarget(),
   countdownPaused: false,
   countdownForceStart: false,
@@ -49,7 +83,34 @@ function readSettings(): AdminSettings {
   try {
     const raw = window.localStorage.getItem(ADMIN_SETTINGS_KEY);
     if (!raw) return DEFAULT_SETTINGS;
-    return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    const settings: AdminSettings = { ...DEFAULT_SETTINGS, ...parsed };
+    if (!Array.isArray(settings.modpackLinks) || settings.modpackLinks.length === 0) {
+      settings.modpackLinks = [
+        {
+          id: "link-1",
+          label: "Wersja Główna (.mrpack)",
+          url: settings.modpackUrl || DEFAULT_SETTINGS.modpackUrl,
+          version: settings.modpackVersion || DEFAULT_SETTINGS.modpackVersion,
+          onlyAfterCountdown: false,
+        },
+        {
+          id: "link-2",
+          label: "Wersja Alternatywna",
+          url: "",
+          version: settings.modpackVersion || DEFAULT_SETTINGS.modpackVersion,
+          onlyAfterCountdown: false,
+        },
+        {
+          id: "link-3",
+          label: "Wersja Manualna (Zip)",
+          url: "",
+          version: settings.modpackVersion || DEFAULT_SETTINGS.modpackVersion,
+          onlyAfterCountdown: false,
+        },
+      ];
+    }
+    return settings;
   } catch {
     return DEFAULT_SETTINGS;
   }

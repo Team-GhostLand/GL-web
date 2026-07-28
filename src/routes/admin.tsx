@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { motion } from "framer-motion";
 import { LogOut, Save, Timer, Play, Pause, RotateCcw, Rocket, Radio, Upload, Trash2, MessageCircle, Send } from "lucide-react";
 import { ADMIN_TOKEN_KEY } from "@/lib/admin-config";
-import { useAdminSettings, type ServerStatusMode } from "@/lib/admin-settings";
+import { useAdminSettings, type ServerStatusMode, type ModpackLink } from "@/lib/admin-settings";
 import type { Screenshot } from "@/lib/assets";
 
 export const Route = createFileRoute("/admin")({
@@ -58,6 +58,7 @@ function AdminPage() {
   const onFiles = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     if (!files.length) return;
+    const today = new Date().toISOString().split("T")[0];
     Promise.all(
       files.map(
         (f) =>
@@ -69,6 +70,9 @@ function AdminPage() {
                 url: String(reader.result),
                 title: f.name.replace(/\.[^.]+$/, ""),
                 category: "Budowle",
+                description: "",
+                date: today,
+                edition: 8,
               });
             reader.readAsDataURL(f);
           }),
@@ -82,6 +86,11 @@ function AdminPage() {
 
   const removeShot = (id: string) => {
     update({ uploadedScreenshots: settings.uploadedScreenshots.filter((s) => s.id !== id) });
+  };
+
+  const updateLink = (index: number, patch: Partial<ModpackLink>) => {
+    const updated = settings.modpackLinks.map((link, i) => (i === index ? { ...link, ...patch } : link));
+    update({ modpackLinks: updated });
   };
 
   return (
@@ -105,25 +114,53 @@ function AdminPage() {
       </header>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Modpack */}
-        <Section title="Modpack" icon={<Save className="h-5 w-5 text-primary" />}>
-          <Field label="URL pliku (.mrpack / .zip)">
-            <input
-              value={settings.modpackUrl}
-              onChange={(e) => update({ modpackUrl: e.target.value })}
-              className="input"
-            />
-          </Field>
-          <Field label="Wersja">
-            <input
-              value={settings.modpackVersion}
-              onChange={(e) => update({ modpackVersion: e.target.value })}
-              className="input"
-            />
-          </Field>
-          <button onClick={() => flash("Zapisano — link opublikowany.")} className="btn-primary">
-            Zapisz i opublikuj
-          </button>
+        {/* Modpack Links */}
+        <Section title="Wersje Modpacka (do 3 linków)" icon={<Save className="h-5 w-5 text-primary" />} span>
+          <div className="grid gap-4 md:grid-cols-3">
+            {settings.modpackLinks.slice(0, 3).map((link, i) => (
+              <div key={link.id || i} className="flex flex-col gap-3 rounded-xl border border-border/60 p-4 glass">
+                <p className="text-xs font-bold uppercase tracking-wider text-primary">Wersja #{i + 1}</p>
+                <Field label="Etykieta / Nazwa">
+                  <input
+                    value={link.label}
+                    onChange={(e) => updateLink(i, { label: e.target.value })}
+                    placeholder="np. Główny Modpack (.mrpack)"
+                    className="input"
+                  />
+                </Field>
+                <Field label="URL pliku (.mrpack / .zip)">
+                  <input
+                    value={link.url}
+                    onChange={(e) => updateLink(i, { url: e.target.value })}
+                    placeholder="https://..."
+                    className="input"
+                  />
+                </Field>
+                <Field label="Wersja">
+                  <input
+                    value={link.version}
+                    onChange={(e) => updateLink(i, { version: e.target.value })}
+                    placeholder="8.0.0"
+                    className="input"
+                  />
+                </Field>
+                <label className="mt-1 flex items-center gap-2 text-xs text-foreground cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={link.onlyAfterCountdown}
+                    onChange={(e) => updateLink(i, { onlyAfterCountdown: e.target.checked })}
+                    className="rounded border-border bg-input accent-primary"
+                  />
+                  <span>Dostępne dopiero po zakończeniu odliczania</span>
+                </label>
+              </div>
+            ))}
+          </div>
+          <div className="mt-2">
+            <button onClick={() => flash("Zapisano linki modpacka.")} className="btn btn-primary">
+              Zapisz i opublikuj
+            </button>
+          </div>
         </Section>
 
         {/* Countdown */}
@@ -219,44 +256,121 @@ function AdminPage() {
         </Section>
 
         {/* Screenshots */}
-        <Section title="Zrzuty ekranu" icon={<Upload className="h-5 w-5 text-primary" />} span>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={onFiles}
-            className="text-xs text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground"
-          />
+        <Section title="Zrzuty ekranu — wgrywanie i edycja" icon={<Upload className="h-5 w-5 text-primary" />} span>
+          <div className="flex flex-col gap-2">
+            <label className="text-xs uppercase tracking-widest text-muted-foreground">Dodaj nowe zrzuty ekranu</label>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={onFiles}
+              className="text-xs text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground cursor-pointer"
+            />
+          </div>
+
           {settings.uploadedScreenshots.length === 0 ? (
-            <p className="text-xs text-muted-foreground">Brak zrzutów. Wybierz pliki, żeby dodać.</p>
+            <p className="text-xs text-muted-foreground">Brak przesłanych zrzutów. Wybierz pliki powyżej, żeby dodać.</p>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {settings.uploadedScreenshots.map((s) => (
-                <div key={s.id} className="group relative overflow-hidden rounded-lg border border-border/60">
-                  <img src={s.url} alt={s.title} className="h-28 w-full object-cover" />
-                  <button
-                    onClick={() => removeShot(s.id)}
-                    className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-red-200 opacity-0 transition-opacity group-hover:opacity-100"
-                    aria-label="Usuń"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
-                  <select
-                    value={s.category}
-                    onChange={(e) =>
-                      update({
-                        uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
-                          x.id === s.id ? { ...x, category: e.target.value as Screenshot["category"] } : x,
-                        ),
-                      })
-                    }
-                    className="w-full bg-black/50 px-2 py-1 text-[10px] text-foreground"
-                  >
-                    {(["Budowle", "Krajobrazy", "Fabryki", "Ekipa"] as const).map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
+                <div key={s.id} className="flex flex-col gap-2 rounded-xl border border-border/60 bg-black/40 p-3">
+                  <div className="relative overflow-hidden rounded-lg">
+                    <img src={s.url} alt={s.title} className="h-36 w-full object-cover" />
+                    <button
+                      onClick={() => removeShot(s.id)}
+                      className="absolute right-2 top-2 rounded-full bg-destructive p-1.5 text-destructive-foreground transition-transform hover:scale-110"
+                      title="Usuń zrzut"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  <Field label="Tytuł">
+                    <input
+                      value={s.title}
+                      onChange={(e) =>
+                        update({
+                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
+                            x.id === s.id ? { ...x, title: e.target.value } : x,
+                          ),
+                        })
+                      }
+                      className="input py-1 text-xs"
+                    />
+                  </Field>
+
+                  <Field label="Kategoria">
+                    <select
+                      value={s.category}
+                      onChange={(e) =>
+                        update({
+                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
+                            x.id === s.id ? { ...x, category: e.target.value } : x,
+                          ),
+                        })
+                      }
+                      className="input py-1 text-xs"
+                    >
+                      {(["Budowle", "Krajobrazy", "Fabryki", "Ekipa"] as const).map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+
+                  <Field label="Opis">
+                    <textarea
+                      value={s.description || ""}
+                      onChange={(e) =>
+                        update({
+                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
+                            x.id === s.id ? { ...x, description: e.target.value } : x,
+                          ),
+                        })
+                      }
+                      rows={2}
+                      placeholder="Dodatkowy opis zrzutu..."
+                      className="input py-1 text-xs"
+                    />
+                  </Field>
+
+                  <Field label="Data uploadu">
+                    <input
+                      type="date"
+                      value={s.date || new Date().toISOString().split("T")[0]}
+                      onChange={(e) =>
+                        update({
+                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
+                            x.id === s.id ? { ...x, date: e.target.value } : x,
+                          ),
+                        })
+                      }
+                      className="input py-1 text-xs"
+                    />
+                  </Field>
+
+                  <Field label="Edycja">
+                    <select
+                      value={s.edition ?? ""}
+                      onChange={(e) =>
+                        update({
+                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
+                            x.id === s.id ? { ...x, edition: e.target.value ? Number(e.target.value) : undefined } : x,
+                          ),
+                        })
+                      }
+                      className="input py-1 text-xs"
+                    >
+                      <option value="">— nieznana —</option>
+                      {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+                        <option key={n} value={n}>
+                          Edycja {n}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
                 </div>
               ))}
             </div>
