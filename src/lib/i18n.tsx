@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { DEFAULT_SETTINGS } from "./admin-settings";
+import { DEFAULT_SETTINGS } from "./settings";
 
 export type Lang = "pl" | "en";
 

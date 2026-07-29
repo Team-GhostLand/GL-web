@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Download, MessageCircle, Package, FileArchive } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useAdminSettings } from "@/lib/admin-settings";
+import { useAdminSettings } from "@/lib/settings";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/download")({

@@ -3,7 +3,7 @@ import { Download, MessageCircle, Images, ScrollText, Archive } from "lucide-rea
 import { LOGO_URL } from "@/lib/assets";
 import { StatusBadge } from "./StatusBadge";
 import { useI18n } from "@/lib/i18n";
-import { useAdminSettings } from "@/lib/admin-settings";
+import { useAdminSettings } from "@/lib/settings";
 
 export function Navbar() {
   const { t, lang, setLang } = useI18n();

@@ -4,7 +4,7 @@ import { Download, MessageCircle, Terminal, ArrowRight } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { DiscordWidget } from "@/components/DiscordWidget";
 import { useI18n } from "@/lib/i18n";
-import { useAdminSettings } from "@/lib/admin-settings";
+import { useAdminSettings } from "@/lib/settings";
 import { BANNER_URL } from "@/lib/assets";
 
 export const Route = createFileRoute("/")({

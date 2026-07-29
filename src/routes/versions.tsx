@@ -21,12 +21,12 @@ import {
   formatBytes,
   formatModTime,
   sortCiFiles,
-  type CiProject,
-  type CiSortKey,
-  type CiSortOrder,
-  type CiVariant,
-  type ParsedCiFile,
-} from "@/lib/ci-archive";
+  type Project,
+  type SortKey,
+  type SortOrder,
+  type Variant,
+  type ParsedFile,
+} from "@/lib/files-archive";
 
 export const Route = createFileRoute("/versions")({
   head: () => ({
@@ -50,13 +50,13 @@ type TabId = (typeof CI_ROOT_TABS)[number]["id"];
 function VersionsPage() {
   const [tab, setTab] = useState<TabId>("modpacks");
   const [path, setPath] = useState("modpacks");
-  const [items, setItems] = useState<ParsedCiFile[]>([]);
+  const [items, setItems] = useState<ParsedFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortKey, setSortKey] = useState<CiSortKey>("time");
-  const [sortOrder, setSortOrder] = useState<CiSortOrder>("desc");
-  const [project, setProject] = useState<CiProject | "All">("All");
-  const [variant, setVariant] = useState<CiVariant | "All">("All");
+  const [sortKey, setSortKey] = useState<SortKey>("time");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [project, setProject] = useState<Project | "All">("All");
+  const [variant, setVariant] = useState<Variant | "All">("All");
   const [query, setQuery] = useState("");
 
   const load = useCallback(async (dir: string) => {
@@ -128,9 +128,8 @@ function VersionsPage() {
             key={t.id}
             type="button"
             onClick={() => switchTab(t.id, t.path)}
-            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-              tab === t.id ? "bg-primary text-primary-foreground" : "glass text-muted-foreground hover:text-foreground"
-            }`}
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-colors ${tab === t.id ? "bg-primary text-primary-foreground" : "glass text-muted-foreground hover:text-foreground"
+              }`}
           >
             {tab === t.id ? <FolderOpen className="h-3.5 w-3.5" /> : <Folder className="h-3.5 w-3.5" />}
             {t.label}
@@ -192,7 +191,7 @@ function VersionsPage() {
           Projekt
           <select
             value={project}
-            onChange={(e) => setProject(e.target.value as CiProject | "All")}
+            onChange={(e) => setProject(e.target.value as Project | "All")}
             className="mt-1 w-full rounded-lg border border-border bg-input px-2 py-2 text-xs text-foreground outline-none focus:border-primary"
           >
             {(["All", "GhostLand", "GhostRun", "CraftMine", "Other"] as const).map((p) => (
@@ -206,7 +205,7 @@ function VersionsPage() {
           Wariant
           <select
             value={variant}
-            onChange={(e) => setVariant(e.target.value as CiVariant | "All")}
+            onChange={(e) => setVariant(e.target.value as Variant | "All")}
             className="mt-1 w-full rounded-lg border border-border bg-input px-2 py-2 text-xs text-foreground outline-none focus:border-primary"
           >
             {(["All", "Full", "Slim", "Server", "Tweakable"] as const).map((v) => (
@@ -221,7 +220,7 @@ function VersionsPage() {
           <div className="mt-1 flex gap-1">
             <select
               value={sortKey}
-              onChange={(e) => setSortKey(e.target.value as CiSortKey)}
+              onChange={(e) => setSortKey(e.target.value as SortKey)}
               className="w-full rounded-lg border border-border bg-input px-2 py-2 text-xs text-foreground outline-none focus:border-primary"
             >
               <option value="time">Czas</option>

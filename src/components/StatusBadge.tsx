@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useAdminSettings } from "@/lib/admin-settings";
+import { useAdminSettings } from "@/lib/settings";
 import { useI18n } from "@/lib/i18n";
 import { fetchMcStatus, type McStatus } from "@/lib/mc-status";
 import { cn } from "@/lib/utils";

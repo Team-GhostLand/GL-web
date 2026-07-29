@@ -11,7 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AdminSettingsProvider } from "@/lib/admin-settings";
+import { SettingsProvider } from "@/lib/settings";
 import { I18nProvider } from "@/lib/i18n";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -147,7 +147,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
-        <AdminSettingsProvider>
+        <SettingsProvider>
           <ParallaxBackground />
           <div className="relative flex min-h-screen flex-col">
             <Navbar />
@@ -156,7 +156,7 @@ function RootComponent() {
             </div>
             <Footer />
           </div>
-        </AdminSettingsProvider>
+        </SettingsProvider>
       </I18nProvider>
     </QueryClientProvider>
   );

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 import { type Screenshot } from "@/lib/assets";
-import { useAdminSettings, getGalleryScreenshots } from "@/lib/admin-settings";
+import { useAdminSettings, getGalleryScreenshots } from "@/lib/settings";
 import { useI18n } from "@/lib/i18n";
 import { Lightbox } from "@/components/Lightbox";
 
@@ -76,11 +76,10 @@ function ScreenshotsPage() {
           <button
             key={c}
             onClick={() => setFilter(c)}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
-              filter === c
+            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${filter === c
                 ? "bg-primary text-primary-foreground"
                 : "glass text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             {c}
           </button>
@@ -93,11 +92,10 @@ function ScreenshotsPage() {
           <button
             key={e}
             onClick={() => setEdition(e)}
-            className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
-              edition === e
+            className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${edition === e
                 ? "bg-accent text-accent-foreground"
                 : "glass text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             {e === "Wszystkie" ? "Wszystkie" : `Ed. ${e}`}
           </button>
@@ -119,11 +117,10 @@ function ScreenshotsPage() {
             key={key}
             type="button"
             onClick={() => setSortKey(key)}
-            className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
-              sortKey === key
+            className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${sortKey === key
                 ? "bg-primary/90 text-primary-foreground"
                 : "glass text-muted-foreground hover:text-foreground"
-            }`}
+              }`}
           >
             {label}
           </button>

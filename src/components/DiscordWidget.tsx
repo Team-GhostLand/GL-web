@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAdminSettings } from "@/lib/admin-settings";
+import { useAdminSettings } from "@/lib/settings";
 import { useI18n } from "@/lib/i18n";
 import { MessageCircle, ExternalLink } from "lucide-react";
 

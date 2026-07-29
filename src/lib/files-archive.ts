@@ -2,9 +2,11 @@
  *  Served directly from disk — independent of the legacy aux stack on :2137.
  */
 
-export const CI_BASE = "/modules/ci";
+import { DEFAULT_SETTINGS } from "./settings";
 
-export type CiListingEntry = {
+export const PATH_BASE = DEFAULT_SETTINGS.apiRoute;
+
+export type ListingEntry = {
   name: string;
   size: number;
   url: string;
@@ -14,16 +16,16 @@ export type CiListingEntry = {
   is_symlink?: boolean;
 };
 
-export type CiProject = "GhostLand" | "GhostRun" | "CraftMine" | "Other";
-export type CiVariant = "Full" | "Slim" | "Server" | "Tweakable" | "Other";
-export type CiSortKey = "name" | "size" | "time";
-export type CiSortOrder = "asc" | "desc";
+export type Project = "GhostLand" | "GhostRun" | "CraftMine" | "Other";
+export type Variant = "Full" | "Slim" | "Server" | "Tweakable" | "Other";
+export type SortKey = "name" | "size" | "time";
+export type SortOrder = "asc" | "desc";
 
-export type ParsedCiFile = {
-  entry: CiListingEntry;
-  project: CiProject;
+export type ParsedFile = {
+  entry: ListingEntry;
+  project: Project;
   version: string;
-  variant: CiVariant;
+  variant: Variant;
   hidden: boolean;
   downloadUrl: string;
 };
@@ -36,37 +38,37 @@ function normalizePath(path: string): string {
 export function resolveCiUrl(dirPath: string, relativeUrl: string): string {
   const cleanRel = relativeUrl.replace(/^\.\//, "");
   const base = normalizePath(dirPath);
-  const joined = base ? `${CI_BASE}/${base}/${cleanRel}` : `${CI_BASE}/${cleanRel}`;
+  const joined = base ? `${PATH_BASE}/${base}/${cleanRel}` : `${PATH_BASE}/${cleanRel}`;
   // Preserve encoding already present in Caddy JSON urls; encode remaining spaces.
   return joined.replace(/ /g, "%20");
 }
 
-export async function fetchCiListing(path = ""): Promise<CiListingEntry[]> {
+export async function fetchCiListing(path = ""): Promise<ListingEntry[]> {
   const clean = normalizePath(path);
-  const url = clean ? `${CI_BASE}/${clean}/` : `${CI_BASE}/`;
+  const url = clean ? `${PATH_BASE}/${clean}/` : `${PATH_BASE}/`;
   const res = await fetch(url, {
     headers: { Accept: "application/json" },
   });
   if (!res.ok) {
     throw new Error(`CI listing failed (${res.status})`);
   }
-  const data = (await res.json()) as CiListingEntry[];
+  const data = (await res.json()) as ListingEntry[];
   if (!Array.isArray(data)) {
     throw new Error("CI listing returned unexpected payload");
   }
   return data;
 }
 
-export function parseCiFilename(name: string): Omit<ParsedCiFile, "entry" | "downloadUrl"> {
+export function parseCiFilename(name: string): Omit<ParsedFile, "entry" | "downloadUrl"> {
   const base = name.replace(/\/$/, "");
   const hidden = base === "latest_server.mrpack" || base.startsWith("latest_server.");
 
-  let project: CiProject = "Other";
+  let project: Project = "Other";
   if (/^GhostLand/i.test(base)) project = "GhostLand";
   else if (/^GhostRun/i.test(base)) project = "GhostRun";
   else if (/^CraftMine/i.test(base)) project = "CraftMine";
 
-  let variant: CiVariant = "Full";
+  let variant: Variant = "Full";
   if (/Server Edition/i.test(base)) variant = "Server";
   else if (/Slim Edition/i.test(base)) variant = "Slim";
   else if (/Tweakable Edition/i.test(base)) variant = "Tweakable";
@@ -80,7 +82,7 @@ export function parseCiFilename(name: string): Omit<ParsedCiFile, "entry" | "dow
   return { project, version, variant, hidden };
 }
 
-export function enrichListing(dirPath: string, entries: CiListingEntry[]): ParsedCiFile[] {
+export function enrichListing(dirPath: string, entries: ListingEntry[]): ParsedFile[] {
   return entries.map((entry) => {
     const meta = parseCiFilename(entry.name.replace(/\/$/, ""));
     return {
@@ -117,16 +119,16 @@ export function formatModTime(iso: string): string {
 }
 
 export function sortCiFiles(
-  items: ParsedCiFile[],
-  key: CiSortKey,
-  order: CiSortOrder,
-): ParsedCiFile[] {
-  const dirFirst = (a: ParsedCiFile, b: ParsedCiFile) => {
+  items: ParsedFile[],
+  key: SortKey,
+  order: SortOrder,
+): ParsedFile[] {
+  const dirFirst = (a: ParsedFile, b: ParsedFile) => {
     if (a.entry.is_dir !== b.entry.is_dir) return a.entry.is_dir ? -1 : 1;
     return 0;
   };
 
-  const cmp = (a: ParsedCiFile, b: ParsedCiFile) => {
+  const cmp = (a: ParsedFile, b: ParsedFile) => {
     const d = dirFirst(a, b);
     if (d !== 0) return d;
     let r = 0;
@@ -140,14 +142,14 @@ export function sortCiFiles(
 }
 
 export function filterCiFiles(
-  items: ParsedCiFile[],
+  items: ParsedFile[],
   opts: {
-    project?: CiProject | "All";
-    variant?: CiVariant | "All";
+    project?: Project | "All";
+    variant?: Variant | "All";
     query?: string;
     includeHidden?: boolean;
   },
-): ParsedCiFile[] {
+): ParsedFile[] {
   const q = (opts.query ?? "").trim().toLowerCase();
   return items.filter((item) => {
     if (!opts.includeHidden && item.hidden && !item.entry.is_dir) return false;

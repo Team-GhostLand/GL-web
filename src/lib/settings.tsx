@@ -28,7 +28,7 @@ export type ModpackVersion = {
   releasedAt?: string;
 };
 
-export type AdminSettings = {
+export type Settings = {
   modpackUrl: string;
   modpackVersion: string;
   modpackLinks: ModpackLink[];
@@ -51,7 +51,7 @@ export type AdminSettings = {
   langKey: string; //This cannot actually be overridden by the API, no matter what it returns in its JSON. Always the default value is used.
 };
 
-export const DEFAULT_SETTINGS: AdminSettings = {
+export const DEFAULT_SETTINGS: Settings = {
   langKey: "GL_WEB_USERCONF_LANG",
   modpackUrl: "https://ghostland.ovh/downloads/GhostLand-v8.0.mrpack",
   modpackVersion: "8.0.0",
@@ -92,7 +92,7 @@ export const DEFAULT_SETTINGS: AdminSettings = {
   versionArchive: [],
 };
 
-async function readSettings(): Promise<AdminSettings> {
+async function readSettings(): Promise<Settings> {
   try{
     const settings = { ...DEFAULT_SETTINGS, ...(await (await readApiRoute("api/settings.json")).json()) }
     if (!Array.isArray(settings.versionArchive)) {
@@ -109,25 +109,25 @@ async function readSettings(): Promise<AdminSettings> {
   }
 }
 
-const settings = await readSettings()
-const AdminSettingsContext = createContext<AdminSettings>(settings);
+const settingsContents = await readSettings()
+const settingsContext = createContext<Settings>(settingsContents);
 
-export function AdminSettingsProvider({ children }: { children: ReactNode }) {
+export function SettingsProvider({ children }: { children: ReactNode }) {
   return (
-    <AdminSettingsContext.Provider value={settings}>
+    <settingsContext.Provider value={settingsContents}>
       {children}
-    </AdminSettingsContext.Provider>
+    </settingsContext.Provider>
   );
 }
 
 export function useAdminSettings() {
-  const ctx = useContext(AdminSettingsContext);
+  const ctx = useContext(settingsContext);
   if (!ctx) throw new Error("useAdminSettings must be used inside AdminSettingsProvider");
   return ctx;
 }
 
 /** Merged gallery sorted by galleryOrder (unknown ids appended). */
-export function getGalleryScreenshots(settings: AdminSettings): Screenshot[] {
+export function getGalleryScreenshots(settings: Settings): Screenshot[] {
   const hidden = new Set(settings.hiddenScreenshotIds ?? []);
   const overrides = settings.screenshotOverrides ?? {};
   const seeded = WORLD_SCREENSHOTS.filter((s) => !hidden.has(s.id)).map((s) => ({
@@ -156,7 +156,7 @@ export function getGalleryScreenshots(settings: AdminSettings): Screenshot[] {
   return ordered;
 }
 
-export function defaultGalleryOrder(settings: Pick<AdminSettings, "uploadedScreenshots" | "hiddenScreenshotIds">): string[] {
+export function defaultGalleryOrder(settings: Pick<Settings, "uploadedScreenshots" | "hiddenScreenshotIds">): string[] {
   const hidden = new Set(settings.hiddenScreenshotIds ?? []);
   return [
     ...(settings.uploadedScreenshots ?? []).map((s) => s.id),
@@ -168,8 +168,8 @@ export function isSeedScreenshot(id: string) {
   return WORLD_SCREENSHOTS.some((s) => s.id === id);
 }
 
-export function readApiRoute(route: "api/status.json" | "api/settings.json" | "modpacks" | "misc" | "worlds" | "screenshots", settings?: Pick<AdminSettings, "apiRoute">|undefined) {
-  return fetch(DEFAULT_SETTINGS.apiRoute+route)
+export function readApiRoute(route: "api/status.json" | "api/settings.json" | "modpacks" | "misc" | "screenshots", settings?: RequestInit|undefined) {
+  return fetch(DEFAULT_SETTINGS.apiRoute+route, settings)
 }
 
 export function defaultTarget() {
