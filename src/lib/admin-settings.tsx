@@ -1,10 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import {
-  ADMIN_SETTINGS_KEY,
-  DEFAULT_DISCORD_INVITE,
-  DEFAULT_DISCORD_WIDGET_ID,
-  DEFAULT_API_ROUTE,
-} from "./admin-config";
+import { createContext, useContext, type ReactNode } from "react";
 import { WORLD_SCREENSHOTS, type Screenshot } from "./assets";
 
 export type ServerStatusMode = "auto" | "online" | "maintenance" | "offline" | "started";
@@ -42,10 +36,9 @@ export type AdminSettings = {
   countdownPaused: boolean;
   countdownForceStart: boolean;
   statusMode: ServerStatusMode;
-  apiRoute: string;
+  apiRoute: string; //This cannot actually be overridden by the API, no matter what it returns in its JSON. Always the default value is used.
   discordInvite: string;
   discordWidgetId: string;
-  discordWebhookUrl: string;
   uploadedScreenshots: Screenshot[];
   /** Per-id metadata patches for WORLD_SCREENSHOTS */
   screenshotOverrides: Record<string, ScreenshotOverride>;
@@ -55,51 +48,43 @@ export type AdminSettings = {
   galleryOrder: string[];
   /** @deprecated Kept for localStorage migration; public UI uses live CI at /versions. */
   versionArchive: ModpackVersion[];
+  langKey: string; //This cannot actually be overridden by the API, no matter what it returns in its JSON. Always the default value is used.
 };
-
-const defaultTarget = () => {
-  const d = new Date();
-  d.setDate(d.getDate() + 14);
-  d.setHours(20, 0, 0, 0);
-  return d.toISOString();
-};
-
-export const DEFAULT_MODPACK_LINKS: ModpackLink[] = [
-  {
-    id: "link-1",
-    label: "Wersja Główna (.mrpack)",
-    url: "https://ghostland.ovh/downloads/GhostLand-v8.0.mrpack",
-    version: "8.0.0",
-    onlyAfterCountdown: false,
-  },
-  {
-    id: "link-2",
-    label: "Wersja Alternatywna",
-    url: "",
-    version: "8.0.0",
-    onlyAfterCountdown: false,
-  },
-  {
-    id: "link-3",
-    label: "Wersja Manualna (Zip)",
-    url: "",
-    version: "8.0.0",
-    onlyAfterCountdown: false,
-  },
-];
 
 export const DEFAULT_SETTINGS: AdminSettings = {
+  langKey: "GL_WEB_USERCONF_LANG",
   modpackUrl: "https://ghostland.ovh/downloads/GhostLand-v8.0.mrpack",
   modpackVersion: "8.0.0",
-  modpackLinks: DEFAULT_MODPACK_LINKS,
+  modpackLinks: [
+	{
+	  id: "link-1",
+	  label: "Wersja Główna (.mrpack)",
+	  url: "https://ghostland.ovh/downloads/GhostLand-v8.0.mrpack",
+	  version: "8.0.0",
+	  onlyAfterCountdown: false,
+	},
+	{
+	  id: "link-2",
+	  label: "Wersja Alternatywna",
+	  url: "",
+	  version: "8.0.0",
+	  onlyAfterCountdown: false,
+	},
+	{
+	  id: "link-3",
+	  label: "Wersja Manualna (Zip)",
+	  url: "",
+	  version: "8.0.0",
+	  onlyAfterCountdown: false,
+	},
+  ],
   countdownTargetIso: defaultTarget(),
   countdownPaused: false,
   countdownForceStart: false,
   statusMode: "auto",
-  apiRoute: DEFAULT_API_ROUTE,
-  discordInvite: DEFAULT_DISCORD_INVITE,
-  discordWidgetId: DEFAULT_DISCORD_WIDGET_ID,
-  discordWebhookUrl: "",
+  apiRoute: "https://sane.ghostland.ovh/external/files/",
+  discordInvite: "https://discord.gg/SrhYP3HSX",
+  discordWidgetId: "",
   uploadedScreenshots: [],
   screenshotOverrides: {},
   hiddenScreenshotIds: [],
@@ -113,46 +98,8 @@ async function readSettings(): Promise<AdminSettings> {
     if (!Array.isArray(settings.versionArchive)) {
       settings.versionArchive = [];
     }
-    if (!settings.screenshotOverrides || typeof settings.screenshotOverrides !== "object") {
-      settings.screenshotOverrides = {};
-    }
-    if (!Array.isArray(settings.hiddenScreenshotIds)) {
-      settings.hiddenScreenshotIds = [];
-    }
-    if (!Array.isArray(settings.uploadedScreenshots)) {
-      settings.uploadedScreenshots = [];
-    }
-    if (!Array.isArray(settings.galleryOrder) || settings.galleryOrder.length === 0) {
-      const hidden = new Set(settings.hiddenScreenshotIds);
-      settings.galleryOrder = [
-        ...settings.uploadedScreenshots.map((s) => s.id),
-        ...WORLD_SCREENSHOTS.filter((s) => !hidden.has(s.id)).map((s) => s.id),
-      ];
-    }
     if (!Array.isArray(settings.modpackLinks) || settings.modpackLinks.length === 0) {
-      settings.modpackLinks = [
-        {
-          id: "link-1",
-          label: "Wersja Główna (.mrpack)",
-          url: settings.modpackUrl || DEFAULT_SETTINGS.modpackUrl,
-          version: settings.modpackVersion || DEFAULT_SETTINGS.modpackVersion,
-          onlyAfterCountdown: false,
-        },
-        {
-          id: "link-2",
-          label: "Wersja Alternatywna",
-          url: "",
-          version: settings.modpackVersion || DEFAULT_SETTINGS.modpackVersion,
-          onlyAfterCountdown: false,
-        },
-        {
-          id: "link-3",
-          label: "Wersja Manualna (Zip)",
-          url: "",
-          version: settings.modpackVersion || DEFAULT_SETTINGS.modpackVersion,
-          onlyAfterCountdown: false,
-        },
-      ];
+      settings.modpackLinks = DEFAULT_SETTINGS.modpackLinks
     }
     return settings;
   }
@@ -222,6 +169,12 @@ export function isSeedScreenshot(id: string) {
 }
 
 export function readApiRoute(route: "api/status.json" | "api/settings.json" | "modpacks" | "misc" | "worlds" | "screenshots", settings?: Pick<AdminSettings, "apiRoute">|undefined) {
-  const base = settings ? settings.apiRoute : DEFAULT_API_ROUTE;
-  return fetch(base+"/"+route)
+  return fetch(DEFAULT_SETTINGS.apiRoute+route)
 }
+
+export function defaultTarget() {
+  const d = new Date();
+  d.setDate(d.getDate() + 14);
+  d.setHours(20, 0, 0, 0);
+  return d.toISOString();
+};

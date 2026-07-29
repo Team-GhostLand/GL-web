@@ -40,9 +40,9 @@ export type GhostlandStatusJson = {
 let cache: { key: string; ts: number; data: McStatus } | null = null;
 const TTL = 8_000;
 
-export async function fetchMcStatus(host: string, bypassCache: boolean = false): Promise<McStatus> {
+export async function fetchMcStatus(bypassCache: boolean = false): Promise<McStatus> {
   const now = Date.now();
-  const cacheKey = host || "default";
+  const cacheKey = "default";
   if (!bypassCache && cache && cache.key === cacheKey && now - cache.ts < TTL) {
     return cache.data;
   }

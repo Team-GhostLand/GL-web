@@ -15,12 +15,12 @@ export function StatusBadge({ className }: { className?: string }) {
     if (settings.statusMode !== "auto") return;
     setLoading(true);
     try {
-      const data = await fetchMcStatus(settings.apiRoute, bypassCache);
+      const data = await fetchMcStatus(bypassCache);
       setLive(data);
     } finally {
       setLoading(false);
     }
-  }, [settings.apiRoute, settings.statusMode]);
+  }, [settings.statusMode]);
 
   useEffect(() => {
     if (settings.statusMode !== "auto") return;
@@ -61,7 +61,6 @@ export function StatusBadge({ className }: { className?: string }) {
         color,
         className,
       )}
-      title={settings.apiRoute}
     >
       <span className={cn("h-2 w-2 rounded-full animate-pulse-dot", dot)} />
       <span className="whitespace-nowrap">{text}</span>

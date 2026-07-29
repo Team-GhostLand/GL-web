@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { LANG_KEY } from "./admin-config";
+import { DEFAULT_SETTINGS } from "./admin-settings";
 
 export type Lang = "pl" | "en";
 
@@ -100,13 +100,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("pl");
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(LANG_KEY) as Lang | null;
+    const saved = window.localStorage.getItem(DEFAULT_SETTINGS.langKey) as Lang | null;
     if (saved === "pl" || saved === "en") setLangState(saved);
   }, []);
 
   const setLang = (l: Lang) => {
     setLangState(l);
-    window.localStorage.setItem(LANG_KEY, l);
+    window.localStorage.setItem(DEFAULT_SETTINGS.langKey, l);
   };
 
   const t = (k: TranslationKey) => dict[lang][k] ?? k;
