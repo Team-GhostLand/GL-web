@@ -5,9 +5,14 @@ import {
   DEFAULT_DISCORD_WIDGET_ID,
   DEFAULT_MC_HOST,
 } from "./admin-config";
-import type { Screenshot } from "./assets";
+import { WORLD_SCREENSHOTS, type Screenshot } from "./assets";
 
 export type ServerStatusMode = "auto" | "online" | "maintenance" | "offline" | "started";
+
+/** Metadata overrides for seed (static) screenshots, keyed by id. */
+export type ScreenshotOverride = Partial<
+  Pick<Screenshot, "title" | "category" | "description" | "date" | "edition" | "tags">
+>;
 
 export type ModpackLink = {
   id: string;
@@ -15,6 +20,18 @@ export type ModpackLink = {
   url: string;
   version: string;
   onlyAfterCountdown: boolean;
+};
+
+export type ModpackVersion = {
+  id: string;
+  edition: number;
+  label: string;
+  version: string;
+  url: string;
+  filename?: string;
+  size?: string;
+  notes?: string;
+  releasedAt?: string;
 };
 
 export type AdminSettings = {
@@ -30,6 +47,14 @@ export type AdminSettings = {
   discordWidgetId: string;
   discordWebhookUrl: string;
   uploadedScreenshots: Screenshot[];
+  /** Per-id metadata patches for WORLD_SCREENSHOTS */
+  screenshotOverrides: Record<string, ScreenshotOverride>;
+  /** Seed screenshot ids hidden from the public gallery */
+  hiddenScreenshotIds: string[];
+  /** Explicit gallery display order (uploaded + seed ids). */
+  galleryOrder: string[];
+  /** @deprecated Kept for localStorage migration; public UI uses live CI at /versions. */
+  versionArchive: ModpackVersion[];
 };
 
 const defaultTarget = () => {
@@ -76,6 +101,10 @@ export const DEFAULT_SETTINGS: AdminSettings = {
   discordWidgetId: DEFAULT_DISCORD_WIDGET_ID,
   discordWebhookUrl: "",
   uploadedScreenshots: [],
+  screenshotOverrides: {},
+  hiddenScreenshotIds: [],
+  galleryOrder: WORLD_SCREENSHOTS.map((s) => s.id),
+  versionArchive: [],
 };
 
 function readSettings(): AdminSettings {
@@ -85,6 +114,25 @@ function readSettings(): AdminSettings {
     if (!raw) return DEFAULT_SETTINGS;
     const parsed = JSON.parse(raw);
     const settings: AdminSettings = { ...DEFAULT_SETTINGS, ...parsed };
+    if (!Array.isArray(settings.versionArchive)) {
+      settings.versionArchive = [];
+    }
+    if (!settings.screenshotOverrides || typeof settings.screenshotOverrides !== "object") {
+      settings.screenshotOverrides = {};
+    }
+    if (!Array.isArray(settings.hiddenScreenshotIds)) {
+      settings.hiddenScreenshotIds = [];
+    }
+    if (!Array.isArray(settings.uploadedScreenshots)) {
+      settings.uploadedScreenshots = [];
+    }
+    if (!Array.isArray(settings.galleryOrder) || settings.galleryOrder.length === 0) {
+      const hidden = new Set(settings.hiddenScreenshotIds);
+      settings.galleryOrder = [
+        ...settings.uploadedScreenshots.map((s) => s.id),
+        ...WORLD_SCREENSHOTS.filter((s) => !hidden.has(s.id)).map((s) => s.id),
+      ];
+    }
     if (!Array.isArray(settings.modpackLinks) || settings.modpackLinks.length === 0) {
       settings.modpackLinks = [
         {
@@ -169,4 +217,46 @@ export function useAdminSettings() {
   const ctx = useContext(AdminSettingsContext);
   if (!ctx) throw new Error("useAdminSettings must be used inside AdminSettingsProvider");
   return ctx;
+}
+
+/** Merged gallery sorted by galleryOrder (unknown ids appended). */
+export function getGalleryScreenshots(settings: AdminSettings): Screenshot[] {
+  const hidden = new Set(settings.hiddenScreenshotIds ?? []);
+  const overrides = settings.screenshotOverrides ?? {};
+  const seeded = WORLD_SCREENSHOTS.filter((s) => !hidden.has(s.id)).map((s) => ({
+    ...s,
+    ...overrides[s.id],
+    id: s.id,
+    url: s.url,
+  }));
+  const byId = new Map<string, Screenshot>();
+  for (const s of settings.uploadedScreenshots ?? []) byId.set(s.id, s);
+  for (const s of seeded) byId.set(s.id, s);
+
+  const order = settings.galleryOrder ?? [];
+  const seen = new Set<string>();
+  const ordered: Screenshot[] = [];
+  for (const id of order) {
+    const shot = byId.get(id);
+    if (shot && !seen.has(id)) {
+      ordered.push(shot);
+      seen.add(id);
+    }
+  }
+  for (const [id, shot] of byId) {
+    if (!seen.has(id)) ordered.push(shot);
+  }
+  return ordered;
+}
+
+export function defaultGalleryOrder(settings: Pick<AdminSettings, "uploadedScreenshots" | "hiddenScreenshotIds">): string[] {
+  const hidden = new Set(settings.hiddenScreenshotIds ?? []);
+  return [
+    ...(settings.uploadedScreenshots ?? []).map((s) => s.id),
+    ...WORLD_SCREENSHOTS.filter((s) => !hidden.has(s.id)).map((s) => s.id),
+  ];
+}
+
+export function isSeedScreenshot(id: string) {
+  return WORLD_SCREENSHOTS.some((s) => s.id === id);
 }

@@ -8,6 +8,8 @@ export function Lightbox({
   category,
   description,
   date,
+  edition,
+  tags,
   onClose,
 }: {
   src: string | null;
@@ -15,6 +17,8 @@ export function Lightbox({
   category?: string;
   description?: string;
   date?: string;
+  edition?: number;
+  tags?: string[];
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -58,10 +62,15 @@ export function Lightbox({
             <div className="flex w-full flex-col gap-1 px-3 py-1">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="font-heading text-lg font-bold text-foreground">{alt}</h3>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                   {category && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-primary/20 px-2.5 py-0.5 font-medium text-primary">
                       <Tag className="h-3 w-3" /> {category}
+                    </span>
+                  )}
+                  {edition != null && (
+                    <span className="rounded-full bg-accent/20 px-2.5 py-0.5 font-bold text-accent-foreground">
+                      ED. {edition}
                     </span>
                   )}
                   {date && (
@@ -72,6 +81,15 @@ export function Lightbox({
                 </div>
               </div>
               {description && <p className="text-xs text-muted-foreground">{description}</p>}
+              {tags && tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {tags.map((t) => (
+                    <span key={t} className="rounded bg-muted/40 px-2 py-0.5 text-[10px] text-muted-foreground">
+                      #{t}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </motion.div>

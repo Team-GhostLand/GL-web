@@ -1,15 +1,36 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { LogOut, Save, Timer, Play, Pause, RotateCcw, Rocket, Radio, Upload, Trash2, MessageCircle, Send } from "lucide-react";
-import { ADMIN_TOKEN_KEY } from "@/lib/admin-config";
-import { useAdminSettings, type ServerStatusMode, type ModpackLink } from "@/lib/admin-settings";
-import type { Screenshot } from "@/lib/assets";
+import {
+  LogOut,
+  Save,
+  Timer,
+  Play,
+  Pause,
+  RotateCcw,
+  Rocket,
+  Radio,
+  MessageCircle,
+  Send,
+  Archive,
+} from "lucide-react";
+import {
+  ADMIN_TOKEN_KEY,
+  clearAdminToken,
+  validateAdminToken,
+} from "@/lib/admin-config";
+import {
+  useAdminSettings,
+  type ServerStatusMode,
+  type ModpackLink,
+} from "@/lib/admin-settings";
+import { ScreenshotsAdminSection } from "@/components/ScreenshotsAdminSection";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
       { title: "Admin — GhostLand" },
+      { name: "description", content: "Panel administracyjny GhostLand: zarządzanie licznikiem, wersjami modpacka, statusem serwera i galerią." },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
@@ -27,12 +48,22 @@ function AdminPage() {
   const { settings, update, reset } = useAdminSettings();
   const [authed, setAuthed] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const t = window.localStorage.getItem(ADMIN_TOKEN_KEY);
-    if (!t) navigate({ to: "/login" });
-    else setAuthed(true);
+    let cancelled = false;
+    const token = window.localStorage.getItem(ADMIN_TOKEN_KEY);
+    void validateAdminToken(token).then((ok) => {
+      if (cancelled) return;
+      if (!ok) {
+        clearAdminToken();
+        navigate({ to: "/login" });
+      } else {
+        setAuthed(true);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [navigate]);
 
   useEffect(() => {
@@ -46,46 +77,13 @@ function AdminPage() {
   const flash = (msg: string) => setToast(msg);
 
   const logout = () => {
-    window.localStorage.removeItem(ADMIN_TOKEN_KEY);
+    clearAdminToken();
     navigate({ to: "/" });
   };
 
   const setStatus = (mode: ServerStatusMode) => {
     update({ statusMode: mode });
     flash(`Status: ${mode}`);
-  };
-
-  const onFiles = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    if (!files.length) return;
-    const today = new Date().toISOString().split("T")[0];
-    Promise.all(
-      files.map(
-        (f) =>
-          new Promise<Screenshot>((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () =>
-              resolve({
-                id: crypto.randomUUID(),
-                url: String(reader.result),
-                title: f.name.replace(/\.[^.]+$/, ""),
-                category: "Budowle",
-                description: "",
-                date: today,
-                edition: 8,
-              });
-            reader.readAsDataURL(f);
-          }),
-      ),
-    ).then((shots) => {
-      update({ uploadedScreenshots: [...shots, ...settings.uploadedScreenshots] });
-      flash(`Dodano ${shots.length} zrzutów`);
-      if (fileRef.current) fileRef.current.value = "";
-    });
-  };
-
-  const removeShot = (id: string) => {
-    update({ uploadedScreenshots: settings.uploadedScreenshots.filter((s) => s.id !== id) });
   };
 
   const updateLink = (index: number, patch: Partial<ModpackLink>) => {
@@ -255,126 +253,18 @@ function AdminPage() {
           />
         </Section>
 
-        {/* Screenshots */}
-        <Section title="Zrzuty ekranu — wgrywanie i edycja" icon={<Upload className="h-5 w-5 text-primary" />} span>
-          <div className="flex flex-col gap-2">
-            <label className="text-xs uppercase tracking-widest text-muted-foreground">Dodaj nowe zrzuty ekranu</label>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={onFiles}
-              className="text-xs text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground cursor-pointer"
-            />
-          </div>
+        <ScreenshotsAdminSection flash={flash} />
 
-          {settings.uploadedScreenshots.length === 0 ? (
-            <p className="text-xs text-muted-foreground">Brak przesłanych zrzutów. Wybierz pliki powyżej, żeby dodać.</p>
-          ) : (
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {settings.uploadedScreenshots.map((s) => (
-                <div key={s.id} className="flex flex-col gap-2 rounded-xl border border-border/60 bg-black/40 p-3">
-                  <div className="relative overflow-hidden rounded-lg">
-                    <img src={s.url} alt={s.title} className="h-36 w-full object-cover" />
-                    <button
-                      onClick={() => removeShot(s.id)}
-                      className="absolute right-2 top-2 rounded-full bg-destructive p-1.5 text-destructive-foreground transition-transform hover:scale-110"
-                      title="Usuń zrzut"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-
-                  <Field label="Tytuł">
-                    <input
-                      value={s.title}
-                      onChange={(e) =>
-                        update({
-                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
-                            x.id === s.id ? { ...x, title: e.target.value } : x,
-                          ),
-                        })
-                      }
-                      className="input py-1 text-xs"
-                    />
-                  </Field>
-
-                  <Field label="Kategoria">
-                    <select
-                      value={s.category}
-                      onChange={(e) =>
-                        update({
-                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
-                            x.id === s.id ? { ...x, category: e.target.value } : x,
-                          ),
-                        })
-                      }
-                      className="input py-1 text-xs"
-                    >
-                      {(["Budowle", "Krajobrazy", "Fabryki", "Ekipa"] as const).map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                  </Field>
-
-                  <Field label="Opis">
-                    <textarea
-                      value={s.description || ""}
-                      onChange={(e) =>
-                        update({
-                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
-                            x.id === s.id ? { ...x, description: e.target.value } : x,
-                          ),
-                        })
-                      }
-                      rows={2}
-                      placeholder="Dodatkowy opis zrzutu..."
-                      className="input py-1 text-xs"
-                    />
-                  </Field>
-
-                  <Field label="Data uploadu">
-                    <input
-                      type="date"
-                      value={s.date || new Date().toISOString().split("T")[0]}
-                      onChange={(e) =>
-                        update({
-                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
-                            x.id === s.id ? { ...x, date: e.target.value } : x,
-                          ),
-                        })
-                      }
-                      className="input py-1 text-xs"
-                    />
-                  </Field>
-
-                  <Field label="Edycja">
-                    <select
-                      value={s.edition ?? ""}
-                      onChange={(e) =>
-                        update({
-                          uploadedScreenshots: settings.uploadedScreenshots.map((x) =>
-                            x.id === s.id ? { ...x, edition: e.target.value ? Number(e.target.value) : undefined } : x,
-                          ),
-                        })
-                      }
-                      className="input py-1 text-xs"
-                    >
-                      <option value="">— nieznana —</option>
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                        <option key={n} value={n}>
-                          Edycja {n}
-                        </option>
-                      ))}
-                    </select>
-                  </Field>
-                </div>
-              ))}
-            </div>
-          )}
+        <Section title="Archiwum CI" icon={<Archive className="h-5 w-5 text-primary" />} span>
+          <p className="text-xs text-muted-foreground">
+            Archiwum wersji to natywne CI nowej strony: pliki z dysku serwera pod{" "}
+            <code className="rounded bg-muted/40 px-1">/modules/ci/</code>, UI na{" "}
+            <code className="rounded bg-muted/40 px-1">/versions</code>. Nie korzysta ze starego stacku na porcie
+            2137.
+          </p>
+          <Link to="/versions" className="btn btn-primary w-fit">
+            Otwórz archiwum CI
+          </Link>
         </Section>
 
         <Section title="Reset" icon={<RotateCcw className="h-5 w-5 text-red-300" />} span>
@@ -476,3 +366,4 @@ function AnnounceForm({ webhook, onResult }: { webhook: string; onResult: (m: st
     </div>
   );
 }
+

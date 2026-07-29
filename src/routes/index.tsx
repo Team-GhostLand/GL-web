@@ -54,6 +54,7 @@ function Home() {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="mx-auto mb-8 w-full max-w-3xl animate-shimmer"
         />
+        <h1 className="sr-only">GhostLand 8.0 — półprywatny modpack Minecraft NeoForge 1.21.1</h1>
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

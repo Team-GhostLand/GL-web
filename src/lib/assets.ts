@@ -20,17 +20,18 @@ export type Screenshot = {
   description?: string;
   date?: string;
   edition?: number;
+  tags?: string[];
 };
 
 export const WORLD_SCREENSHOTS: Screenshot[] = [
-  { id: "swiat", url: swiat.url, title: "Świat GhostLand", category: "Krajobrazy", date: "2021-01-01", description: "Malowniczy krajobraz świata GhostLand z perspektywy lotu ptaka." },
-  { id: "tower", url: tower.url, title: "Wielka Wieża we mgle", category: "Budowle", date: "2021-01-01", description: "Monumentalna wieża wyłaniająca się z gęstej mgły." },
-  { id: "lostnisko", url: lostnisko.url, title: "Lotnisko GAY", category: "Budowle", date: "2021-01-01", description: "Główne pasy startowe i terminal węzła lotniczego." },
-  { id: "fabryka", url: fabryka.url, title: "Wielka fabryka nocą", category: "Fabryki", date: "2021-01-01", description: "Nocne oświetlenie industrialnej części GhostLand." },
-  { id: "evil", url: evilFactory.url, title: "Kotłownia zła", category: "Fabryki", date: "2021-01-01", description: "Serce podziemnego kompleksu technologicznego." },
-  { id: "cozy", url: cozy.url, title: "Przytulne wnętrze", category: "Budowle", date: "2021-01-01", description: "Ciepła baza mieszkalna z kominkiem i widokiem." },
-  { id: "bar", url: sunsetBar.url, title: "Bar o zachodzie", category: "Budowle", date: "2021-01-01", description: "Strefa relaksu na świeżym powietrzu." },
-  { id: "group", url: groupPhoto.url, title: "Ekipa GhostLand", category: "Ekipa", date: "2021-01-01", description: "Wspólne zdjęcie graczy edycji." },
+  { id: "swiat", url: swiat.url, title: "Świat GhostLand", category: "Krajobrazy", date: "2021-01-01", edition: 5, description: "Malowniczy krajobraz świata GhostLand z perspektywy lotu ptaka." },
+  { id: "tower", url: tower.url, title: "Wielka Wieża we mgle", category: "Budowle", date: "2021-01-01", edition: 5, description: "Monumentalna wieża wyłaniająca się z gęstej mgły." },
+  { id: "lostnisko", url: lostnisko.url, title: "Lotnisko GAY", category: "Budowle", date: "2021-01-01", edition: 5, description: "Główne pasy startowe i terminal węzła lotniczego." },
+  { id: "fabryka", url: fabryka.url, title: "Wielka fabryka nocą", category: "Fabryki", date: "2021-01-01", edition: 5, description: "Nocne oświetlenie industrialnej części GhostLand." },
+  { id: "evil", url: evilFactory.url, title: "Kotłownia zła", category: "Fabryki", date: "2021-01-01", edition: 5, description: "Serce podziemnego kompleksu technologicznego." },
+  { id: "cozy", url: cozy.url, title: "Przytulne wnętrze", category: "Budowle", date: "2021-01-01", edition: 5, description: "Ciepła baza mieszkalna z kominkiem i widokiem." },
+  { id: "bar", url: sunsetBar.url, title: "Bar o zachodzie", category: "Budowle", date: "2021-01-01", edition: 5, description: "Strefa relaksu na świeżym powietrzu." },
+  { id: "group", url: groupPhoto.url, title: "Ekipa GhostLand", category: "Ekipa", date: "2021-01-01", edition: 5, description: "Wspólne zdjęcie graczy edycji." },
 ];
 
 export const PARALLAX_BACKGROUNDS = [

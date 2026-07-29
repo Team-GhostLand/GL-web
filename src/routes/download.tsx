@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Download, MessageCircle, Package, Archive, ExternalLink } from "lucide-react";
+import { Download, MessageCircle, Package, FileArchive } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useAdminSettings } from "@/lib/admin-settings";
 import { useI18n } from "@/lib/i18n";
 
@@ -95,17 +96,16 @@ function DownloadPage() {
       </section>
 
       <section className="mt-10 text-center">
-        <a
-          href="https://ci.ghostland.ovh"
-          target="_blank"
-          rel="noreferrer"
-          className="group inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-5 py-3 text-xs font-semibold text-muted-foreground backdrop-blur-md transition-all hover:border-primary/60 hover:text-primary hover:shadow-[0_0_20px_-4px_hsl(var(--primary))]"
+        <Link
+          to="/versions"
+          className="group inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-5 py-3 text-xs font-semibold text-primary transition-all hover:border-primary hover:bg-primary/20"
         >
-          <Archive className="h-4 w-4 transition-transform group-hover:-rotate-6" />
-          Archiwum starych edycji
-          <ExternalLink className="h-3 w-3 opacity-60" />
-        </a>
-        <p className="mt-2 text-[11px] text-muted-foreground/70">Poprzednie wersje modpacka trzymamy na osobnej stronie CI.</p>
+          <FileArchive className="h-4 w-4" />
+          Pełne archiwum CI → /versions
+        </Link>
+        <p className="mt-2 text-[11px] text-muted-foreground/70">
+          Historyczne i developerskie .mrpack z serwera CI (modpacks + dev-sharing).
+        </p>
       </section>
     </main>
   );

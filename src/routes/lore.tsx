@@ -14,7 +14,6 @@ import {
   Building2,
   Landmark,
   Rocket,
-  ExternalLink,
   Heart,
 } from "lucide-react";
 
@@ -119,7 +118,7 @@ function LorePage() {
 
       <section className="mt-16">
         <h2 className="mb-6 font-heading text-2xl text-ember">Edycje</h2>
-        <div className="relative border-l-2 border-border/60 pl-6 ml-[14px]">
+        <div className="relative border-l-2 border-border/60 pl-6 ml-[15px]">
           {editions.map((e, i) => (
             <motion.div
               key={String(e.n)}
@@ -158,14 +157,11 @@ function LorePage() {
         </div>
         <div className="mt-6 flex justify-center">
           <a
-            href="https://ci.ghostland.ovh"
-            target="_blank"
-            rel="noreferrer"
+            href="/versions"
             className="group inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-5 py-2.5 text-xs font-semibold text-muted-foreground backdrop-blur-md transition-all hover:border-primary/60 hover:text-primary hover:shadow-[0_0_20px_-4px_hsl(var(--primary))]"
           >
             <Archive className="h-4 w-4 transition-transform group-hover:-rotate-6" />
-            Archiwum starych edycji
-            <ExternalLink className="h-3 w-3 opacity-60" />
+            Archiwum CI — wszystkie wersje
           </a>
         </div>
       </section>

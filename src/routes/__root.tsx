@@ -85,17 +85,40 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "GhostLand 8.0" },
       { name: "description", content: "GhostLand — półprywatny modpack Minecraft. Odliczanie do 8. edycji, lore, screeny i społeczność Discord." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: "/favicon.png" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:image", content: "/favicon.png" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png", sizes: "512x512" },
+      { rel: "shortcut icon", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "512x512" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Uncial+Antiqua&display=swap" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "GhostLand",
+          url: "https://ghostland.ovh",
+          description:
+            "GhostLand — półprywatny modpack Minecraft NeoForge 1.21.1. 8. edycja, lore, galeria i społeczność Discord.",
+          inLanguage: "pl",
+          publisher: {
+            "@type": "Organization",
+            name: "GhostLand",
+            url: "https://ghostland.ovh",
+          },
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Download, MessageCircle, Images, ScrollText } from "lucide-react";
+import { Download, MessageCircle, Images, ScrollText, Archive } from "lucide-react";
 import { LOGO_URL } from "@/lib/assets";
 import { StatusBadge } from "./StatusBadge";
 import { useI18n } from "@/lib/i18n";
@@ -49,6 +49,13 @@ export function Navbar() {
             <ScrollText className="h-4 w-4" />
             {t("nav.lore")}
           </Link>
+          <Link
+            to="/versions"
+            className="hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground lg:inline-flex"
+          >
+            <Archive className="h-4 w-4" />
+            Wersje
+          </Link>
           <a
             href={settings.discordInvite}
             target="_blank"
@@ -61,7 +68,7 @@ export function Navbar() {
           <button
             onClick={() => setLang(lang === "pl" ? "en" : "pl")}
             className="rounded-full border border-border px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
-            aria-label="Language"
+            aria-label={`Zmień język (obecnie ${lang.toUpperCase()}, przełącz na ${lang === "pl" ? "EN" : "PL"})`}
           >
             {lang.toUpperCase()}
           </button>

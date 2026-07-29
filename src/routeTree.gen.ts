@@ -9,31 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as DownloadRouteImport } from './routes/download'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as LoreRouteImport } from './routes/lore'
+import { Route as VersionsRouteImport } from './routes/versions'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ScreenshotsRouteImport } from './routes/screenshots'
+import { Route as LoreRouteImport } from './routes/lore'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as DownloadRouteImport } from './routes/download'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as IndexRouteImport } from './routes/index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const VersionsRoute = VersionsRouteImport.update({
+  id: '/versions',
+  path: '/versions',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DownloadRoute = DownloadRouteImport.update({
-  id: '/download',
-  path: '/download',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const ScreenshotsRoute = ScreenshotsRouteImport.update({
+  id: '/screenshots',
+  path: '/screenshots',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoreRoute = LoreRouteImport.update({
@@ -41,9 +38,24 @@ const LoreRoute = LoreRouteImport.update({
   path: '/lore',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ScreenshotsRoute = ScreenshotsRouteImport.update({
-  id: '/screenshots',
-  path: '/screenshots',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DownloadRoute = DownloadRouteImport.update({
+  id: '/download',
+  path: '/download',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -54,6 +66,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/lore': typeof LoreRoute
   '/screenshots': typeof ScreenshotsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/versions': typeof VersionsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +76,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/lore': typeof LoreRoute
   '/screenshots': typeof ScreenshotsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/versions': typeof VersionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +87,30 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/lore': typeof LoreRoute
   '/screenshots': typeof ScreenshotsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/versions': typeof VersionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/download' | '/login' | '/lore' | '/screenshots'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/download'
+    | '/login'
+    | '/lore'
+    | '/screenshots'
+    | '/sitemap.xml'
+    | '/versions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/download' | '/login' | '/lore' | '/screenshots'
+  to:
+    | '/'
+    | '/admin'
+    | '/download'
+    | '/login'
+    | '/lore'
+    | '/screenshots'
+    | '/sitemap.xml'
+    | '/versions'
   id:
     | '__root__'
     | '/'
@@ -85,6 +119,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/lore'
     | '/screenshots'
+    | '/sitemap.xml'
+    | '/versions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,36 +130,31 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   LoreRoute: typeof LoreRoute
   ScreenshotsRoute: typeof ScreenshotsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  VersionsRoute: typeof VersionsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/versions': {
+      id: '/versions'
+      path: '/versions'
+      fullPath: '/versions'
+      preLoaderRoute: typeof VersionsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/download': {
-      id: '/download'
-      path: '/download'
-      fullPath: '/download'
-      preLoaderRoute: typeof DownloadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/screenshots': {
+      id: '/screenshots'
+      path: '/screenshots'
+      fullPath: '/screenshots'
+      preLoaderRoute: typeof ScreenshotsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lore': {
@@ -133,11 +164,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/screenshots': {
-      id: '/screenshots'
-      path: '/screenshots'
-      fullPath: '/screenshots'
-      preLoaderRoute: typeof ScreenshotsRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/download': {
+      id: '/download'
+      path: '/download'
+      fullPath: '/download'
+      preLoaderRoute: typeof DownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -150,6 +202,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   LoreRoute: LoreRoute,
   ScreenshotsRoute: ScreenshotsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  VersionsRoute: VersionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

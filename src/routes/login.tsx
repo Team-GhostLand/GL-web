@@ -2,12 +2,20 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Lock, LogIn } from "lucide-react";
-import { ADMIN_CREDENTIALS, ADMIN_TOKEN_KEY } from "@/lib/admin-config";
+import {
+  ADMIN_TOKEN_KEY,
+  clearLoginAttempts,
+  createAdminToken,
+  isLoginRateLimited,
+  recordLoginFailure,
+  verifyAdminCredentials,
+} from "@/lib/admin-config";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "Login — GhostLand" },
+      { name: "description", content: "Ukryty panel logowania administratora GhostLand. Dostępne tylko dla ekipy modpacka." },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
@@ -19,14 +27,33 @@ function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-      window.localStorage.setItem(ADMIN_TOKEN_KEY, crypto.randomUUID());
+    if (isLoginRateLimited()) {
+      setError("Zbyt wiele prób. Poczekaj kilka minut.");
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    try {
+      const ok = await verifyAdminCredentials(username.trim(), password);
+      if (!ok) {
+        recordLoginFailure();
+        setError(
+          isLoginRateLimited()
+            ? "Zbyt wiele prób. Poczekaj kilka minut."
+            : "Nieprawidłowe dane logowania.",
+        );
+        return;
+      }
+      clearLoginAttempts();
+      const token = await createAdminToken();
+      window.localStorage.setItem(ADMIN_TOKEN_KEY, token);
       navigate({ to: "/admin" });
-    } else {
-      setError("Nieprawidłowe dane logowania.");
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -35,7 +62,7 @@ function LoginPage() {
       <motion.form
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        onSubmit={onSubmit}
+        onSubmit={(e) => void onSubmit(e)}
         className="glass w-full rounded-2xl p-8"
       >
         <div className="mb-6 flex items-center gap-2 text-ghost">
@@ -67,15 +94,12 @@ function LoginPage() {
 
         <button
           type="submit"
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground glow-ember transition-transform hover:scale-[1.01]"
+          disabled={busy}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground glow-ember transition-transform hover:scale-[1.01] disabled:opacity-60"
         >
           <LogIn className="h-4 w-4" />
-          Zaloguj
+          {busy ? "Logowanie…" : "Zaloguj"}
         </button>
-
-        <p className="mt-4 text-[10px] text-muted-foreground">
-          Podpowiedź dev: <code>admin</code> / <code>ghostland8</code>. Mock auth, dane trzymane w localStorage.
-        </p>
       </motion.form>
     </main>
   );
