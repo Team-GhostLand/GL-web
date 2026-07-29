@@ -7,7 +7,7 @@ import { useAdminSettings } from "@/lib/admin-settings";
 
 export function Navbar() {
   const { t, lang, setLang } = useI18n();
-  const { settings } = useAdminSettings();
+  const settings = useAdminSettings();
 
   return (
     <header

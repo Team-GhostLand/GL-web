@@ -3,7 +3,7 @@ import {
   ADMIN_SETTINGS_KEY,
   DEFAULT_DISCORD_INVITE,
   DEFAULT_DISCORD_WIDGET_ID,
-  DEFAULT_MC_HOST,
+  DEFAULT_API_ROUTE,
 } from "./admin-config";
 import { WORLD_SCREENSHOTS, type Screenshot } from "./assets";
 
@@ -42,7 +42,7 @@ export type AdminSettings = {
   countdownPaused: boolean;
   countdownForceStart: boolean;
   statusMode: ServerStatusMode;
-  mcHost: string;
+  apiRoute: string;
   discordInvite: string;
   discordWidgetId: string;
   discordWebhookUrl: string;
@@ -96,7 +96,7 @@ export const DEFAULT_SETTINGS: AdminSettings = {
   countdownPaused: false,
   countdownForceStart: false,
   statusMode: "auto",
-  mcHost: DEFAULT_MC_HOST,
+  apiRoute: DEFAULT_API_ROUTE,
   discordInvite: DEFAULT_DISCORD_INVITE,
   discordWidgetId: DEFAULT_DISCORD_WIDGET_ID,
   discordWebhookUrl: "",
@@ -107,13 +107,9 @@ export const DEFAULT_SETTINGS: AdminSettings = {
   versionArchive: [],
 };
 
-function readSettings(): AdminSettings {
-  if (typeof window === "undefined") return DEFAULT_SETTINGS;
-  try {
-    const raw = window.localStorage.getItem(ADMIN_SETTINGS_KEY);
-    if (!raw) return DEFAULT_SETTINGS;
-    const parsed = JSON.parse(raw);
-    const settings: AdminSettings = { ...DEFAULT_SETTINGS, ...parsed };
+async function readSettings(): Promise<AdminSettings> {
+  try{
+    const settings = { ...DEFAULT_SETTINGS, ...(await (await readApiRoute("api/settings.json")).json()) }
     if (!Array.isArray(settings.versionArchive)) {
       settings.versionArchive = [];
     }
@@ -159,55 +155,19 @@ function readSettings(): AdminSettings {
       ];
     }
     return settings;
-  } catch {
-    return DEFAULT_SETTINGS;
+  }
+  catch(e){
+    console.error("Error fetching settings:", e)
+    return DEFAULT_SETTINGS
   }
 }
 
-type Ctx = {
-  settings: AdminSettings;
-  update: (patch: Partial<AdminSettings>) => void;
-  reset: () => void;
-};
-
-const AdminSettingsContext = createContext<Ctx | null>(null);
+const settings = await readSettings()
+const AdminSettingsContext = createContext<AdminSettings>(settings);
 
 export function AdminSettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<AdminSettings>(DEFAULT_SETTINGS);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setSettings(readSettings());
-    setHydrated(true);
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === ADMIN_SETTINGS_KEY) setSettings(readSettings());
-    };
-    const onCustom = () => setSettings(readSettings());
-    window.addEventListener("storage", onStorage);
-    window.addEventListener("gl_settings_updated", onCustom as EventListener);
-    return () => {
-      window.removeEventListener("storage", onStorage);
-      window.removeEventListener("gl_settings_updated", onCustom as EventListener);
-    };
-  }, []);
-
-  const update = (patch: Partial<AdminSettings>) => {
-    setSettings((prev) => {
-      const next = { ...prev, ...patch };
-      try {
-        window.localStorage.setItem(ADMIN_SETTINGS_KEY, JSON.stringify(next));
-        window.dispatchEvent(new CustomEvent("gl_settings_updated"));
-      } catch (err) {
-        console.error("Failed to save admin settings", err);
-      }
-      return next;
-    });
-  };
-
-  const reset = () => update(DEFAULT_SETTINGS);
-
   return (
-    <AdminSettingsContext.Provider value={{ settings: hydrated ? settings : DEFAULT_SETTINGS, update, reset }}>
+    <AdminSettingsContext.Provider value={settings}>
       {children}
     </AdminSettingsContext.Provider>
   );
@@ -259,4 +219,9 @@ export function defaultGalleryOrder(settings: Pick<AdminSettings, "uploadedScree
 
 export function isSeedScreenshot(id: string) {
   return WORLD_SCREENSHOTS.some((s) => s.id === id);
+}
+
+export function readApiRoute(route: "api/status.json" | "api/settings.json" | "modpacks" | "misc" | "worlds" | "screenshots", settings?: Pick<AdminSettings, "apiRoute">|undefined) {
+  const base = settings ? settings.apiRoute : DEFAULT_API_ROUTE;
+  return fetch(base+"/"+route)
 }

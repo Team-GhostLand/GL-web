@@ -27,7 +27,7 @@ type SortKey = "manual" | "date" | "title" | "edition" | "category";
 type SortOrder = "asc" | "desc";
 
 function ScreenshotsPage() {
-  const { settings } = useAdminSettings();
+  const settings = useAdminSettings();
   const { t } = useI18n();
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number]>("Wszystkie");
   const [edition, setEdition] = useState<(typeof EDITIONS)[number]>("Wszystkie");

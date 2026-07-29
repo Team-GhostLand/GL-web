@@ -4,7 +4,7 @@ import { useI18n } from "@/lib/i18n";
 import { MessageCircle, ExternalLink } from "lucide-react";
 
 export function DiscordWidget() {
-  const { settings } = useAdminSettings();
+  const settings = useAdminSettings();
   const { t } = useI18n();
   const [loaded, setLoaded] = useState(false);
 

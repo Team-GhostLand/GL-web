@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { t } = useI18n();
-  const { settings } = useAdminSettings();
+  const settings = useAdminSettings();
 
   const stats = [
     { n: "8", label: t("stats.editions") },

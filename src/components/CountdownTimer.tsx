@@ -55,7 +55,7 @@ function Digit({ value, label }: { value: number; label: string }) {
 }
 
 export function CountdownTimer() {
-  const { settings } = useAdminSettings();
+  const settings = useAdminSettings();
   const { t } = useI18n();
   const { d, h, m, s, done } = useCountdown(
     settings.countdownTargetIso,

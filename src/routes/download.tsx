@@ -18,7 +18,7 @@ export const Route = createFileRoute("/download")({
 });
 
 function DownloadPage() {
-  const { settings } = useAdminSettings();
+  const settings = useAdminSettings();
   const { t } = useI18n();
 
   const targetMs = new Date(settings.countdownTargetIso).getTime();

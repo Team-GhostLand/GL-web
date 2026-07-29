@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { RotateCw } from "lucide-react";
 
 export function StatusBadge({ className }: { className?: string }) {
-  const { settings } = useAdminSettings();
+  const settings = useAdminSettings();
   const { t } = useI18n();
   const [live, setLive] = useState<McStatus | null>(null);
   const [loading, setLoading] = useState(false);
@@ -15,12 +15,12 @@ export function StatusBadge({ className }: { className?: string }) {
     if (settings.statusMode !== "auto") return;
     setLoading(true);
     try {
-      const data = await fetchMcStatus(settings.mcHost, bypassCache);
+      const data = await fetchMcStatus(settings.apiRoute, bypassCache);
       setLive(data);
     } finally {
       setLoading(false);
     }
-  }, [settings.mcHost, settings.statusMode]);
+  }, [settings.apiRoute, settings.statusMode]);
 
   useEffect(() => {
     if (settings.statusMode !== "auto") return;
@@ -61,7 +61,7 @@ export function StatusBadge({ className }: { className?: string }) {
         color,
         className,
       )}
-      title={settings.mcHost}
+      title={settings.apiRoute}
     >
       <span className={cn("h-2 w-2 rounded-full animate-pulse-dot", dot)} />
       <span className="whitespace-nowrap">{text}</span>
