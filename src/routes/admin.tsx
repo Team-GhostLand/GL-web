@@ -112,6 +112,11 @@ function AdminPage() {
       </header>
 
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* Hello! */}
+        <Section title="Witamy w panelu debugowania GhostLand! " icon={<Rocket className="h-5 w-5 text-primary" />} span>
+			Wszystkie zmiany wprowadzone tutaj zostaną zapisane w twoim LocalStorage i nadpiszą JSON pobierany z backendu. Możesz się śmiało bawić :)
+        </Section>
+
         {/* Modpack Links */}
         <Section title="Wersje Modpacka (do 3 linków)" icon={<Save className="h-5 w-5 text-primary" />} span>
           <div className="grid gap-4 md:grid-cols-3">
@@ -366,4 +371,3 @@ function AnnounceForm({ webhook, onResult }: { webhook: string; onResult: (m: st
     </div>
   );
 }
-
