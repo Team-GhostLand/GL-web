@@ -161,6 +161,6 @@ export function filterFiles(
 }
 
 export const ROOT_TABS = [
-  { id: "modpacks", label: "Modpacks", path: "modpacks" },
-  { id: "dev-sharing", label: "Dev sharing", path: "dev-sharing" },
+  { id: "modpacks", label: "Paczki modów", path: "modpacks" },
+  { id: "misc", label: "Misc.", path: "misc" },
 ] as const;

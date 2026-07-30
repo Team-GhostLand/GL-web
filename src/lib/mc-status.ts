@@ -1,3 +1,5 @@
+import { readApiRoute } from "./settings";
+
 export type McStatus = {
   online: boolean;
   players?: { online: number; max: number };
@@ -48,7 +50,7 @@ export async function fetchMcStatus(bypassCache: boolean = false): Promise<McSta
   }
 
   try {
-    const res = await fetch(`/status.json?t=${now}`, { cache: "no-store" });
+    const res = await readApiRoute("/api/status.json", { cache: "no-store" });
     if (res.ok) {
       const json: GhostlandStatusJson = await res.json();
       if (json && (json.minecraft || json.server)) {

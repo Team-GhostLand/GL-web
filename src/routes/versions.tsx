@@ -118,7 +118,7 @@ function VersionsPage() {
         <h1 className="mt-3 font-heading text-4xl font-bold text-ember sm:text-5xl">Wersje modpacka</h1>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
           Pełne archiwum plików do pobrania — katalogi <code className="rounded bg-muted/40 px-1.5 py-0.5 text-[11px]">modpacks</code> i{" "}
-          <code className="rounded bg-muted/40 px-1.5 py-0.5 text-[11px]">dev-sharing</code>. Sortuj, filtruj i pobieraj bezpośrednio.
+          <code className="rounded bg-muted/40 px-1.5 py-0.5 text-[11px]">misc</code>. Sortuj, filtruj i pobieraj bezpośrednio.
         </p>
       </motion.header>
 
@@ -342,6 +342,15 @@ function VersionsPage() {
           <Download className="h-4 w-4" />
           Aktualna wersja
         </Link>
+        <a
+          href="/external/files"
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+        >
+          Nieprzetworzony widok
+        </a>
+      </div>
+
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
       </div>
     </main>
   );

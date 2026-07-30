@@ -61,14 +61,14 @@ export const DEFAULT_SETTINGS: Settings = {
   ],
   countdownTargetIso: defaultTarget(),
   statusMode: "auto",
-  apiRoute: "https://sane.ghostland.ovh/external/files/",
+  apiRoute: "https://sane.ghostland.ovh/external/files",
   discordInvite: "",
   discordWidgetId: "",
 };
 
 async function readSettings(): Promise<Settings> {
   try{
-    const settings = { ...DEFAULT_SETTINGS, ...(await (await readApiRoute("api/settings.json")).json()) }
+    const settings = { ...DEFAULT_SETTINGS, ...(await (await readApiRoute("/api/settings.json")).json()) }
     if (!Array.isArray(settings.versionArchive)) {
       settings.versionArchive = [];
     }
@@ -104,7 +104,7 @@ export function getGalleryScreenshots(settings: Settings): Screenshot[] {
   return WORLD_SCREENSHOTS; //TODO!!! - fetch from the screenshots endpoint
 }
 
-export function readApiRoute(route: "api/status.json" | "api/settings.json" | "modpacks" | "misc" | "screenshots", settings?: RequestInit|undefined) {
+export function readApiRoute(route: "/api/status.json" | "/api/settings.json" | "/api/screenshots.json" | "/modpacks" | "/misc", settings?: RequestInit|undefined) {
   return fetch(DEFAULT_SETTINGS.apiRoute+route, settings)
 }
 
