@@ -104,7 +104,7 @@ async function readSettings(): Promise<Settings> {
     return settings;
   }
   catch(e){
-    console.error("Error fetching settings:", e)
+    console.error("Error fetching settings:", e, "\n\nUsing default ones instead:\n"+JSON.stringify(DEFAULT_SETTINGS))
     return DEFAULT_SETTINGS
   }
 }
