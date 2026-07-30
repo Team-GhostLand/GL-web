@@ -5,17 +5,15 @@ import { useI18n } from "@/lib/i18n";
 import { Download, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
-function useCountdown(targetIso: string, paused: boolean, forceZero: boolean) {
+function useCountdown(targetIso: string) {
   const target = useMemo(() => new Date(targetIso).getTime(), [targetIso]);
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    if (paused || forceZero) return;
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
-  }, [paused, forceZero]);
+  });
 
-  if (forceZero) return { d: 0, h: 0, m: 0, s: 0, done: true };
   const diff = Math.max(0, target - now);
   return {
     d: Math.floor(diff / 86_400_000),
@@ -57,11 +55,7 @@ function Digit({ value, label }: { value: number; label: string }) {
 export function CountdownTimer() {
   const settings = useAdminSettings();
   const { t } = useI18n();
-  const { d, h, m, s, done } = useCountdown(
-    settings.countdownTargetIso,
-    settings.countdownPaused,
-    settings.countdownForceStart,
-  );
+  const { d, h, m, s, done } = useCountdown(settings.countdownTargetIso);
 
   return (
     <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4">
@@ -115,10 +109,6 @@ export function CountdownTimer() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {settings.countdownPaused && !settings.countdownForceStart && (
-        <p className="text-sm text-primary/80">{t("countdown.paused")}</p>
-      )}
     </section>
   );
 }
