@@ -60,7 +60,7 @@ export const DEFAULT_SETTINGS: Settings = {
   ],
   countdownTargetIso: defaultTarget(),
   statusMode: "auto",
-  apiRoute: "https://sane.ghostland.ovh/external/files",
+  apiRoute: "https://ghostland.ovh/external/files",
   discordInvite: "",
   discordWidgetId: "",
 };
