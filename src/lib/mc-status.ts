@@ -5,6 +5,7 @@ export type McStatus = {
   players?: { online: number; max: number };
   motd?: string;
   version?: string;
+  instance?: string|null;
   source?: "status.json";
 };
 
@@ -66,6 +67,7 @@ export async function fetchMcStatus(bypassCache: boolean = false): Promise<McSta
           },
           motd: json.minecraft?.motd,
           version: json.minecraft?.version,
+		  instance: json.minecraft?.active_instance_name,
           source: "status.json",
         };
         cache = { key: cacheKey, ts: now, data };

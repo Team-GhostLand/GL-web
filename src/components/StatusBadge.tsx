@@ -37,8 +37,8 @@ export function StatusBadge({ className }: { className?: string }) {
     color = "text-emerald-300";
     dot = "bg-emerald-400";
     text =
-      settings.statusMode === "auto" && live?.players
-        ? `${live.players.online}/${live.players.max} ${t("status.players")}`
+      settings.statusMode === "auto" && live?.players && live?.instance && live?.version
+        ? `${live.players.online}/${live.players.max} ${t("status.players")} | ${live.instance} (${live.version})`
         : t("status.online");
   } else if (settings.statusMode === "maintenance") {
     color = "text-amber-300";
