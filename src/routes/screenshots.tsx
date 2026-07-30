@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 import { type Screenshot } from "@/lib/assets";
-import { useAdminSettings, getGalleryScreenshots } from "@/lib/settings";
+import { WORLD_SCREENSHOTS } from "@/lib/assets";
 import { useI18n } from "@/lib/i18n";
 import { Lightbox } from "@/components/Lightbox";
 
@@ -27,7 +27,6 @@ type SortKey = "manual" | "date" | "title" | "edition" | "category";
 type SortOrder = "asc" | "desc";
 
 function ScreenshotsPage() {
-  const settings = useAdminSettings();
   const { t } = useI18n();
   const [filter, setFilter] = useState<(typeof CATEGORIES)[number]>("Wszystkie");
   const [edition, setEdition] = useState<(typeof EDITIONS)[number]>("Wszystkie");
@@ -35,7 +34,7 @@ function ScreenshotsPage() {
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
   const [active, setActive] = useState<Screenshot | null>(null);
 
-  const all = useMemo(() => getGalleryScreenshots(settings), [settings]);
+  const all = useMemo(() => WORLD_SCREENSHOTS, []);
 
   const shots = useMemo(() => {
     const filtered = all

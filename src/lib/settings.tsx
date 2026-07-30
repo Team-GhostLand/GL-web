@@ -1,5 +1,4 @@
 import { createContext, useContext, type ReactNode } from "react";
-import { WORLD_SCREENSHOTS, type Screenshot } from "./assets";
 
 export type ServerStatusMode = "auto" | "online" | "maintenance" | "offline" | "started";
 
@@ -69,9 +68,6 @@ export const DEFAULT_SETTINGS: Settings = {
 async function readSettings(): Promise<Settings> {
   try{
     const settings = { ...DEFAULT_SETTINGS, ...(await (await readApiRoute("/api/settings.json")).json()) }
-    if (!Array.isArray(settings.versionArchive)) {
-      settings.versionArchive = [];
-    }
     if (!Array.isArray(settings.modpackLinks) || settings.modpackLinks.length === 0) {
       settings.modpackLinks = DEFAULT_SETTINGS.modpackLinks
     }
@@ -98,10 +94,6 @@ export function useAdminSettings() {
   const ctx = useContext(settingsContext);
   if (!ctx) throw new Error("useAdminSettings must be used inside AdminSettingsProvider");
   return ctx;
-}
-
-export function getGalleryScreenshots(settings: Settings): Screenshot[] {
-  return WORLD_SCREENSHOTS; //TODO!!! - fetch from the screenshots endpoint
 }
 
 export function readApiRoute(route: "/api/status.json" | "/api/settings.json" | "/api/screenshots.json" | "/modpacks" | "/misc", settings?: RequestInit|undefined) {
