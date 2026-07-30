@@ -155,15 +155,6 @@ function LorePage() {
             </motion.div>
           ))}
         </div>
-        <div className="mt-6 flex justify-center">
-          <a
-            href="/versions"
-            className="group inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-5 py-2.5 text-xs font-semibold text-muted-foreground backdrop-blur-md transition-all hover:border-primary/60 hover:text-primary hover:shadow-[0_0_20px_-4px_hsl(var(--primary))]"
-          >
-            <Archive className="h-4 w-4 transition-transform group-hover:-rotate-6" />
-            Archiwum CI — wszystkie wersje
-          </a>
-        </div>
       </section>
 
       <section className="mt-16">

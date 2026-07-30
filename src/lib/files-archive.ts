@@ -1,7 +1,3 @@
-/** Client for GhostLand CI file archive at /modules/ci (host Caddy file_server browse JSON).
- *  Served directly from disk — independent of the legacy aux stack on :2137.
- */
-
 import { DEFAULT_SETTINGS } from "./settings";
 
 export const PATH_BASE = DEFAULT_SETTINGS.apiRoute;
@@ -34,8 +30,8 @@ function normalizePath(path: string): string {
   return path.replace(/^\/+|\/+$/g, "");
 }
 
-/** Resolve a browse-relative URL against the current CI directory path. */
-export function resolveCiUrl(dirPath: string, relativeUrl: string): string {
+/** Resolve a browse-relative URL against the current files directory path. */
+export function resolveUrl(dirPath: string, relativeUrl: string): string {
   const cleanRel = relativeUrl.replace(/^\.\//, "");
   const base = normalizePath(dirPath);
   const joined = base ? `${PATH_BASE}/${base}/${cleanRel}` : `${PATH_BASE}/${cleanRel}`;
@@ -43,23 +39,23 @@ export function resolveCiUrl(dirPath: string, relativeUrl: string): string {
   return joined.replace(/ /g, "%20");
 }
 
-export async function fetchCiListing(path = ""): Promise<ListingEntry[]> {
+export async function fetchListing(path = ""): Promise<ListingEntry[]> {
   const clean = normalizePath(path);
   const url = clean ? `${PATH_BASE}/${clean}/` : `${PATH_BASE}/`;
   const res = await fetch(url, {
     headers: { Accept: "application/json" },
   });
   if (!res.ok) {
-    throw new Error(`CI listing failed (${res.status})`);
+    throw new Error(`File listing failed (${res.status})`);
   }
   const data = (await res.json()) as ListingEntry[];
   if (!Array.isArray(data)) {
-    throw new Error("CI listing returned unexpected payload");
+    throw new Error("File listing returned unexpected payload");
   }
   return data;
 }
 
-export function parseCiFilename(name: string): Omit<ParsedFile, "entry" | "downloadUrl"> {
+export function parseFilename(name: string): Omit<ParsedFile, "entry" | "downloadUrl"> {
   const base = name.replace(/\/$/, "");
   const hidden = base === "latest_server.mrpack" || base.startsWith("latest_server.");
 
@@ -84,11 +80,11 @@ export function parseCiFilename(name: string): Omit<ParsedFile, "entry" | "downl
 
 export function enrichListing(dirPath: string, entries: ListingEntry[]): ParsedFile[] {
   return entries.map((entry) => {
-    const meta = parseCiFilename(entry.name.replace(/\/$/, ""));
+    const meta = parseFilename(entry.name.replace(/\/$/, ""));
     return {
       entry,
       ...meta,
-      downloadUrl: resolveCiUrl(dirPath, entry.url),
+      downloadUrl: resolveUrl(dirPath, entry.url),
     };
   });
 }
@@ -118,7 +114,7 @@ export function formatModTime(iso: string): string {
   });
 }
 
-export function sortCiFiles(
+export function sortFiles(
   items: ParsedFile[],
   key: SortKey,
   order: SortOrder,
@@ -141,7 +137,7 @@ export function sortCiFiles(
   return items.slice().sort(cmp);
 }
 
-export function filterCiFiles(
+export function filterFiles(
   items: ParsedFile[],
   opts: {
     project?: Project | "All";
@@ -164,7 +160,7 @@ export function filterCiFiles(
   });
 }
 
-export const CI_ROOT_TABS = [
+export const ROOT_TABS = [
   { id: "modpacks", label: "Modpacks", path: "modpacks" },
   { id: "dev-sharing", label: "Dev sharing", path: "dev-sharing" },
 ] as const;

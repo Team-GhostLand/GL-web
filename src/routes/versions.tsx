@@ -14,13 +14,13 @@ import {
   Search,
 } from "lucide-react";
 import {
-  CI_ROOT_TABS,
+  ROOT_TABS,
   enrichListing,
-  fetchCiListing,
-  filterCiFiles,
+  fetchListing,
+  filterFiles,
   formatBytes,
   formatModTime,
-  sortCiFiles,
+  sortFiles,
   type Project,
   type SortKey,
   type SortOrder,
@@ -31,13 +31,13 @@ import {
 export const Route = createFileRoute("/versions")({
   head: () => ({
     meta: [
-      { title: "CI · Archiwum — GhostLand" },
+      { title: "Archiwum — GhostLand" },
       {
         name: "description",
         content:
-          "Archiwum CI GhostLand: pobierz historyczne i developerskie wersje modpacków (.mrpack).",
+          "Archiwum GhostLand: pobierz historyczne i developerskie wersje modpacków (.mrpack).",
       },
-      { property: "og:title", content: "CI · Archiwum — GhostLand" },
+      { property: "og:title", content: "Archiwum — GhostLand" },
       { property: "og:description", content: "Archiwum plików modpacka GhostLand." },
       { property: "og:type", content: "website" },
     ],
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/versions")({
   component: VersionsPage,
 });
 
-type TabId = (typeof CI_ROOT_TABS)[number]["id"];
+type TabId = (typeof ROOT_TABS)[number]["id"];
 
 function VersionsPage() {
   const [tab, setTab] = useState<TabId>("modpacks");
@@ -63,11 +63,11 @@ function VersionsPage() {
     setLoading(true);
     setError(null);
     try {
-      const listing = await fetchCiListing(dir);
+      const listing = await fetchListing(dir);
       setItems(enrichListing(dir, listing));
     } catch (e) {
       setItems([]);
-      setError(e instanceof Error ? e.message : "Nie udało się wczytać archiwum CI.");
+      setError(e instanceof Error ? e.message : "Nie udało się wczytać archiwum.");
     } finally {
       setLoading(false);
     }
@@ -87,7 +87,7 @@ function VersionsPage() {
 
   const crumbs = useMemo(() => {
     const parts = path.split("/").filter(Boolean);
-    const out: { label: string; path: string }[] = [{ label: "CI", path: "" }];
+    const out: { label: string; path: string }[] = [{ label: "files", path: "" }];
     let acc = "";
     for (const p of parts) {
       acc = acc ? `${acc}/${p}` : p;
@@ -97,8 +97,8 @@ function VersionsPage() {
   }, [path]);
 
   const visible = useMemo(() => {
-    const filtered = filterCiFiles(items, { project, variant, query });
-    return sortCiFiles(filtered, sortKey, sortOrder);
+    const filtered = filterFiles(items, { project, variant, query });
+    return sortFiles(filtered, sortKey, sortOrder);
   }, [items, project, variant, query, sortKey, sortOrder]);
 
   const openDir = (name: string) => {
@@ -114,16 +114,16 @@ function VersionsPage() {
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">CI · Archiwum</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">Archiwum</p>
         <h1 className="mt-3 font-heading text-4xl font-bold text-ember sm:text-5xl">Wersje modpacka</h1>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
-          Pełne archiwum plików z serwera CI — katalogi <code className="rounded bg-muted/40 px-1.5 py-0.5 text-[11px]">modpacks</code> i{" "}
+          Pełne archiwum plików do pobrania — katalogi <code className="rounded bg-muted/40 px-1.5 py-0.5 text-[11px]">modpacks</code> i{" "}
           <code className="rounded bg-muted/40 px-1.5 py-0.5 text-[11px]">dev-sharing</code>. Sortuj, filtruj i pobieraj bezpośrednio.
         </p>
       </motion.header>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-        {CI_ROOT_TABS.map((t) => (
+        {ROOT_TABS.map((t) => (
           <button
             key={t.id}
             type="button"
@@ -162,7 +162,7 @@ function VersionsPage() {
                   } else {
                     setPath(c.path);
                     const root = c.path.split("/")[0];
-                    const match = CI_ROOT_TABS.find((t) => t.path === root);
+                    const match = ROOT_TABS.find((t) => t.path === root);
                     if (match) setTab(match.id);
                   }
                 }}
@@ -255,7 +255,7 @@ function VersionsPage() {
           <div className="px-4 py-12 text-center">
             <Archive className="mx-auto h-10 w-10 text-muted-foreground/50" />
             <p className="mt-3 text-sm text-red-300">{error}</p>
-            <p className="mt-1 text-xs text-muted-foreground">Sprawdź, czy `/modules/ci` jest dostępne na ghostland.ovh.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Sprawdź, czy `/external/files` jest dostępne na ghostland.ovh.</p>
             <button type="button" onClick={() => void load(path)} className="btn mt-4 inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-xs">
               <RefreshCw className="h-3.5 w-3.5" /> Spróbuj ponownie
             </button>

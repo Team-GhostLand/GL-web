@@ -22,7 +22,7 @@ function DownloadPage() {
   const { t } = useI18n();
 
   const targetMs = new Date(settings.countdownTargetIso).getTime();
-  const countdownEnded = settings.countdownForceStart || targetMs <= Date.now();
+  const countdownEnded = targetMs <= Date.now();
 
   const availableLinks = (settings.modpackLinks || []).filter((link) => {
     if (!link.url || !link.url.trim()) return false;
@@ -101,11 +101,8 @@ function DownloadPage() {
           className="group inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-5 py-3 text-xs font-semibold text-primary transition-all hover:border-primary hover:bg-primary/20"
         >
           <FileArchive className="h-4 w-4" />
-          Pełne archiwum CI → /versions
+          Archiwum poprzednich wersji
         </Link>
-        <p className="mt-2 text-[11px] text-muted-foreground/70">
-          Historyczne i developerskie .mrpack z serwera CI (modpacks + dev-sharing).
-        </p>
       </section>
     </main>
   );
