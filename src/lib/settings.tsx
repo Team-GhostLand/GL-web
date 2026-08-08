@@ -96,8 +96,8 @@ export function useAdminSettings() {
   return ctx;
 }
 
-export function readApiRoute(route: "/api/status.json" | "/api/settings.json" | "/api/screenshots.json" | "/modpacks" | "/misc", settings?: RequestInit|undefined) {
-  return fetch(DEFAULT_SETTINGS.apiRoute+route, settings)
+export function readApiRoute(route: "/api/status.json" | "/api/settings.json" | "/api/screenshots.json", settings?: RequestInit|undefined) {
+  return fetch(DEFAULT_SETTINGS.apiRoute+route, {cache: "no-store", ...settings});
 }
 
 export function defaultTarget() {
