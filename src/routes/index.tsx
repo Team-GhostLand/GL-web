@@ -10,9 +10,9 @@ import { BANNER_URL } from "@/lib/assets";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "GhostLand 8.0 — prywatny modpack Minecraft" },
+      { title: "GhostLand — prywatny modpack Minecraft" },
       { name: "description", content: "Odliczanie do startu 8. edycji GhostLand: mrocznego, immersyjnego modpacka NEOFORGE 1.21.1. Pobierz paczkę i dołącz przez Discord." },
-      { property: "og:title", content: "GhostLand 8.0 — prywatny modpack Minecraft" },
+      { property: "og:title", content: "GhostLand — prywatny modpack Minecraft" },
       { property: "og:description", content: "Odliczanie do startu 8. edycji GhostLand: mroczny, immersyjny modpack NEOFORGE 1.21.1." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -48,13 +48,13 @@ function Home() {
       <section className="relative flex min-h-[85vh] flex-col items-center justify-center px-4 pt-16 pb-24 text-center">
         <motion.img
           src={BANNER_URL}
-          alt="GhostLand 8.0"
+          alt="GhostLand banner"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="mx-auto mb-8 w-full max-w-3xl animate-shimmer"
         />
-        <h1 className="sr-only">GhostLand 8.0 — półprywatny modpack Minecraft NeoForge 1.21.1</h1>
+        <h1 className="sr-only">GhostLand — półprywatny modpack i serwer Minecraft, i serwer Discord</h1>
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

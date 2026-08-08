@@ -7,9 +7,9 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/download")({
   head: () => ({
     meta: [
-      { title: "Pobierz modpack — GhostLand 8.0" },
+      { title: "Pobierz modpack — GhostLand" },
       { name: "description", content: "Pobierz najnowszą wersję modpacka GhostLand i dowiedz się, jak dołączyć do serwera przez Discord." },
-      { property: "og:title", content: "Pobierz modpack — GhostLand 8.0" },
+      { property: "og:title", content: "Pobierz modpack — GhostLand" },
       { property: "og:description", content: "Pobierz najnowszą wersję modpacka GhostLand." },
       { property: "og:type", content: "website" },
     ],

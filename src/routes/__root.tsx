@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "GhostLand 8.0" },
+      { title: "GhostLand" },
       { name: "description", content: "GhostLand — półprywatny modpack Minecraft. Odliczanie do 8. edycji, lore, screeny i społeczność Discord." },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "/favicon.png" },
